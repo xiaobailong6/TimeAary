@@ -1,6 +1,7 @@
 package local.daybook.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -21,14 +22,14 @@ import local.daybook.model.EntryKind
 
 @Composable
 fun EntryCard(entry: Entry, reference: LocalDate, busy: Boolean,
-              onEdit: () -> Unit, onDelete: () -> Unit, onComplete: () -> Unit) {
+              onEdit: () -> Unit, onDelete: () -> Unit, onComplete: () -> Unit, onOpen: () -> Unit) {
     var menu by remember { mutableStateOf(false) }
     val colors = MaterialTheme.colorScheme
     val description = remember(entry, reference) {
         DayCounter(Clock.fixed(reference.atStartOfDay(ZoneOffset.UTC).toInstant(), ZoneOffset.UTC))
             .describe(entry.date, entry.countUp, entry.includeFirstDay)
     }
-    GlassCard(Modifier.fillMaxWidth()) {
+    GlassCard(Modifier.fillMaxWidth().clickable(onClickLabel = "查看完整详情", onClick = onOpen)) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(44.dp).background(colors.primaryContainer, RoundedCornerShape(15.dp)),
                 contentAlignment = Alignment.Center) {
@@ -45,6 +46,7 @@ fun EntryCard(entry: Entry, reference: LocalDate, busy: Boolean,
                     AppIcon(AppGlyph.More, tint = colors.onSurfaceVariant)
                 }
                 DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
+                    DropdownMenuItem(text = { Text("查看详情") }, onClick = { menu = false; onOpen() })
                     DropdownMenuItem(text = { Text("编辑") }, onClick = { menu = false; onEdit() })
                     DropdownMenuItem(text = { Text("删除", color = colors.error) },
                         onClick = { menu = false; onDelete() })

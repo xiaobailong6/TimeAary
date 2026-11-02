@@ -2,9 +2,9 @@
 
 使用 **Kotlin + Jetpack Compose** 开发的本地优先 Android 时间与目标管理应用：公历 / 农历纪念日、正倒数日、数值进度、计数、目标 / 习惯、专注、父子任务、待办及统计，统一采用注重可读性与性能的**液态玻璃**界面。
 
-> 项目状态：已开始工程开发，首批包含公历单次正倒数日、待办、Room 分页与四入口界面，并已配置 GitHub Actions。尚未取得云端构建 / 真机验收结果，不是全功能完成版本。实施状态见 [开发记录](docs/DEVELOPMENT.md)。
+> 项目状态：基础日期 / 待办管理已接入数据库级搜索筛选排序、实时详情、文字分享和真实记录汇总 / 周月年计划分布。上一基础版由用户确认编译成功；本轮仍待云端构建与真机验收，不是全功能正式版。[开发记录](docs/DEVELOPMENT.md) · [验收步骤](docs/ACCEPTANCE.md)。
 
-- 首个正式版本：`1.0.0`，标签 `v1.0.0`；当前开发版 `1.0.0-dev` / `3`，正式发布前继续递增版本码
+- 首个正式版本：`1.0.0`，标签 `v1.0.0`；当前开发版 `1.0.0-dev` / `4`，正式发布前继续递增版本码
 - 正式发行架构：仅 `arm64-v8a`
 - 开源许可：**GPL-3.0-only**，仅 GNU GPL 第 3 版
 - 详细清单、页面布局与验收：[项目开发要求](PROJECT_REQUIREMENTS.md)
@@ -101,8 +101,8 @@
 
 ## 5. 云端构建与目录约定
 
-- 本地没有 Android 构建环境，不执行本地 Gradle 编译；Kotlin 单元测试、Lint、debug / release 编译均在 GitHub Actions 运行。
-- 推送或创建 PR 后运行 Android checks，仅上传 `app-debug-isolated` 独立调试包与 `checks` 报告；debug 使用 `local.daybook.debug`，不用于日常覆盖升级。普通 CI 不接触签名 Secrets，也不上传 unsigned release。
+- 本地没有 Android 构建环境，不执行本地 Gradle 编译；release 单元测试、Lint 和固定签名 APK 编译在 GitHub Actions 运行，不再构建 debug APK 或 unsigned release APK。
+- 普通 Android checks / PR 只运行检查，不读取签名 Secrets、不打包、不上传文件。唯一安装包由签名工作流提供，Artifact 中仅有 APK，不上传报告、schema、校验文件、构建信息或其他附件。
 - 应用源码与路径使用中性命名，不能嵌入项目名、GitHub 用户名、仓库名或地址；品牌只用于展示资源值，远程入口以后由独立配置注入。
 - 不创建 `main` 等目录，实际源码位于 `app/src/code`、资源位于 `app/src/resources`、测试位于 `app/tests`，Manifest 位于 `app/src/AndroidManifest.xml`。
 - 单个 `app` 模块按 `model`、`datetime`、`data`、`ui` 划分职责，不创建空 feature 模块；身份暂定 `local.daybook`，minSdk 26。
@@ -112,7 +112,7 @@
 
 ## 6. GitHub Releases 与版本
 
-- 当前实际签名构建为 `1.0.0-dev` / `3`，仅为开发版；以下 `1.0.0` 正式流程为待实现契约，不得将其作为全功能正式版。
+- 当前实际签名构建为 `1.0.0-dev` / `4`，仅为开发版；以下 `1.0.0` 正式流程为待实现契约，不得将其作为全功能正式版。
 - 正式首版版本名为 `1.0.0`、标签 `v1.0.0`；正式发布前须使用高于全部已分发开发版的版本码，配置以 version.properties 为唯一来源。
 - 每次正式更新同时递增版本名和版本码、维护 CHANGELOG；版本名遵循 SemVer，不复用已发布标签。
 - GitHub Actions 校验标签、版本、更新日志、测试与许可，通过后构建签名 ARM64 APK，验证签名 / 包信息 / ABI。

@@ -85,8 +85,6 @@ class SigningTests(unittest.TestCase):
         metadata = {'applicationId': package, 'elements': [{'versionName': '1.0.0-dev', 'versionCode': 1}]}
         (release / 'output-metadata.json').write_text(json.dumps(metadata))
         (self.workspace / 'version.properties').write_text('versionName=1.0.0\nversionCode=1\n')
-        (self.workspace / 'LICENSE').write_text('test-only-license')
-        (self.workspace / 'THIRD_PARTY_NOTICES.md').write_text('test-only-notices')
         results = [
             subprocess.CompletedProcess([], 0, f'Signer #1 certificate SHA-256 digest: {signer or fingerprint}\n'),
             subprocess.CompletedProcess([], 0,
@@ -95,16 +93,16 @@ class SigningTests(unittest.TestCase):
         ]
         return patch.object(signing.subprocess, 'run', side_effect=results)
 
-    def test_fixture_package_is_copied_with_checksum(self):
+    def test_distribution_contains_only_verified_apk(self):
         with self.package_fixture():
             signing.verify()
         distribution = self.workspace / 'app/build/distribution'
         apk = distribution / 'app-1.0.0-dev-1-arm64-v8a.apk'
         self.assertTrue(apk.exists())
-        info = json.loads((distribution / 'build-info.json').read_text())
-        self.assertFalse(info['fullFeatureRelease'])
-        self.assertIn(info['sha256'], (distribution / 'SHA256SUMS.txt').read_text())
-        self.assertFalse(any(path.suffix == '.p12' for path in distribution.iterdir()))
+        self.assertEqual([apk], list(distribution.iterdir()))
+        with zipfile.ZipFile(apk) as archive:
+            self.assertIn('AndroidManifest.xml', archive.namelist())
+        self.assertIn('APK SHA-256:', self.output.getvalue())
 
     def test_wrong_signer_rejected(self):
         with self.package_fixture(signer='b' * 64):

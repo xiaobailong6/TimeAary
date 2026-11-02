@@ -5,28 +5,32 @@ import androidx.paging.PagingConfig
 import androidx.paging.map
 import androidx.room.withTransaction
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 import kotlinx.coroutines.flow.map
-import local.daybook.model.Entry
-import local.daybook.model.EntryKind
-import local.daybook.model.EntryRepository
+import local.daybook.model.*
 
 class LocalEntryRepository(private val database: EntryDatabase) : EntryRepository {
     private val dao = database.entries()
 
-    override fun entries(kind: EntryKind) = Pager(
+    override fun entries(kind: EntryKind, query: EntryQuery) = Pager(
         PagingConfig(pageSize = 30, initialLoadSize = 30, enablePlaceholders = false, maxSize = 150)
-    ) { dao.page(kind.name) }.flow.map { page ->
-        page.map { row ->
-            Entry(row.id, row.title, row.note, LocalDate.ofEpochDay(row.epochDay),
-                EntryKind.valueOf(row.kind), row.countUp, row.includeFirstDay, row.completed)
-        }
+    ) {
+        val options = query.options.normalized(kind)
+        dao.page(kind.name, options.search.trim(), options.filter.name, options.sort.name, query.reference.toEpochDay())
+    }.flow.map { page -> page.map { it.toEntry() } }
+
+    override fun observe(id: String) = dao.observe(id).map { it?.toEntry() }
+    override fun summary(today: LocalDate) = dao.summary(today.toEpochDay())
+    override fun distribution(start: LocalDate, endInclusive: LocalDate): kotlinx.coroutines.flow.Flow<List<DayBucket>> {
+        // 一次最多一年聚合点，避免错误区间读取整个数据库历史。
+        require(ChronoUnit.DAYS.between(start, endInclusive) in 0..365)
+        return dao.distribution(start.toEpochDay(), endInclusive.toEpochDay())
     }
 
     override suspend fun save(entry: Entry) {
         require(entry.title.isNotBlank() && entry.title.length <= 80)
         require(entry.note.length <= 4000)
         require(entry.date.year in 1900..2200)
-        // 检查与写入置于同一事务；后续可加入修订冲突校验而不改变 UI 合约。
         database.withTransaction {
             if (dao.exists(entry.id)) {
                 dao.update(entry.id, entry.title.trim(), entry.note, entry.date.toEpochDay(),
@@ -40,4 +44,7 @@ class LocalEntryRepository(private val database: EntryDatabase) : EntryRepositor
 
     override suspend fun delete(id: String) = dao.delete(id)
     override suspend fun setCompleted(id: String, completed: Boolean) = dao.complete(id, completed)
+
+    private fun EntryRow.toEntry() = Entry(id, title, note, LocalDate.ofEpochDay(epochDay),
+        EntryKind.valueOf(kind), countUp, includeFirstDay, completed)
 }

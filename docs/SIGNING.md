@@ -1,13 +1,12 @@
 # 签名、安装与覆盖升级
 
-## 先区分两种安装包
+## 唯一安装包渠道
 
-| 渠道 | Artifact | applicationId | 用途 |
-| --- | --- | --- | --- |
-| 固定签名开发版 | `app-signed-development` | `local.daybook` | 日常安装与连续覆盖升级 |
-| 独立 debug | `app-debug-isolated` | `local.daybook.debug` | 临时调试，与日常包共存，不保证跨 runner 证书稳定 |
+Actions 仅构建固定签名 release APK，唯一 Artifact 为 `app-signed-development`，应用身份保持 `local.daybook`。不构建 debug APK，也不构建 unsigned release APK。
 
-当前版本源为 `version.properties`，构建版本名统一增加 `-dev`。本轮版本码 `3`，签名文件名为 `app-1.0.0-dev-3-arm64-v8a.apk`。它仍不是全功能正式版。
+普通 Android checks / PR 只运行 release 单元测试与 Lint，不打包、不读取 Secrets、不上传任何文件。签名作业也只上传 APK，不上传测试报告、Room schema、校验和文件、证书文件、构建 JSON、许可副本或其他附件。Gradle 内部保留 debug 变体隔离配置，不代表云端继续构建 debug。
+
+当前版本源为 `version.properties`，构建版本名统一增加 `-dev`。本轮版本码 `4`，签名文件名为 `app-1.0.0-dev-4-arm64-v8a.apk`。它仍不是全功能正式版。
 
 **能够安装的 APK 已有签名，不等于它使用了固定发布密钥。** Android 默认 debug 签名在全新 GitHub runner 上可能重新生成。旧流程的 app-debug 与固定签名版同用 local.daybook，却证书不同，这是覆盖失败的一条明确风险路径。本轮将 debug 应用身份隔离，不能反向修复已经安装的旧证书包。
 
@@ -16,9 +15,9 @@
 1. 用户手动 commit / push 代码；代理不执行提交或推送。
 2. 默认分支 push 后，`Signed development APK` 自动执行；仍可在 Actions 手动 Run workflow。其他分支跳过签名 job，PR 不运行签名作业。
 3. 作业使用 `signing` Environment。若配置了人工批准，每次必须批准后才运行，不能误把等待批准当成没有签名产物。
-4. 作业运行脚本测试、Kotlin 单元测试和 release Lint，再解码 Secrets；以 `-PrequireSigning=true` 构建 release，凭据不完整直接失败，不回退为 debug / unsigned 包。
-5. 通过真实 `apksigner verify`、固定证书指纹、包名、版本码、SDK 和 native ABI 检查后，上传 `app-signed-development`。只有成功作业的该 Artifact 才是日常升级渠道。
-6. 解压下载，核对 `build-info.json` 的 commit / versionCode 和证书指纹，再安装。普通 `Android checks` 的 app-debug-isolated 不是升级包。
+4. 作业运行脚本测试、release 单元测试和 release Lint，再解码 Secrets；以 `-PrequireSigning=true` 构建 release，凭据不完整直接失败，不回退为 debug / unsigned 包。
+5. 通过真实 `apksigner verify`、固定证书指纹、包名、版本码、SDK 和 native ABI 检查后，上传 `app-signed-development`，其中仅包含签名 APK。
+6. 解压下载 APK 安装。版本码在文件名中，公开证书与 APK SHA-256 仅打印在验证步骤日志中；不再提供 build-info.json 或其他附件。失败详情直接查看 Actions 日志，普通 Android checks 不提供安装包或报告 Artifact。
 
 工作流不创建 Release、不打标签、不修改远端仓库。自动运行指用户推送触发，与代理提交无关。
 
@@ -65,4 +64,4 @@
 
 本地独立脚本测试使用合成 fixture 和模拟工具输出来覆盖失败分支，不等同真实 APK 验签。Android 编译、Lint、Kotlin 测试、真实 apksigner 和设备覆盖安装仍在云端 / 真机验证。
 
-签名作业附件包含 APK、SHA256SUMS.txt、certificate-sha256.txt、build-info.json 和许可文件，不包含密钥、密码、Base64 或 R8 mapping。临时密钥在 always 清理步骤删除。ABI filter 与文件名不等同纯 JVM APK 的 ARM64 安装限制；正式发布仍需要完整功能、许可、安装与数据迁移验收。
+签名作业仅上传一个已验证的 APK；校验和与证书指纹只在日志中显示。不生成分发用 SHA256SUMS.txt、certificate-sha256.txt、build-info.json 或许可副本，不上传 reports、schema、mapping、密钥或密码。源码与许可继续保留在仓库，正式分发仍须满足对应源码与许可义务；不以附件精简免除这些义务。临时密钥在 always 清理步骤删除。ABI filter 与文件名不等同纯 JVM APK 的 ARM64 安装限制。

@@ -1,4 +1,4 @@
-"""Signing boundary for the manual workflow; never print private key material."""
+"""Verify fixed signing identity and stage only the signed APK for distribution."""
 from pathlib import Path
 import base64
 import binascii
@@ -83,20 +83,10 @@ def verify():
     destination = folder / f'app-{version}-{code}-arm64-v8a.apk'
     shutil.copyfile(apk, destination)
     checksum = hashlib.sha256(destination.read_bytes()).hexdigest()
-    (folder / 'SHA256SUMS.txt').write_text(f'{checksum}  {destination.name}\n', encoding='utf-8')
-    (folder / 'certificate-sha256.txt').write_text(expected + '\n', encoding='utf-8')
-    info = {
-        'applicationId': 'local.daybook', 'versionName': version, 'versionCode': code,
-        'commit': os.environ.get('GITHUB_SHA'), 'certificateSha256': expected,
-        'sha256': checksum, 'nativeLibraries': native,
-        'channel': 'development', 'fullFeatureRelease': False,
-        'note': 'ABI filtering does not prohibit non-ARM64 installation when no native code is present.',
-    }
-    (folder / 'build-info.json').write_text(json.dumps(info, indent=2) + '\n', encoding='utf-8')
-    shutil.copyfile(ROOT / 'LICENSE', folder / 'LICENSE')
-    shutil.copyfile(ROOT / 'THIRD_PARTY_NOTICES.md', folder / 'THIRD_PARTY_NOTICES.md')
     print(f'Verified signed development APK: {destination.name}')
+    print(f'Application: local.daybook; version: {version} ({code})')
     print(f'Certificate SHA-256: {expected}')
+    print(f'APK SHA-256: {checksum}')
 
 
 def cleanup():

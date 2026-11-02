@@ -20,27 +20,6 @@ import androidx.compose.ui.unit.dp
 import local.daybook.BuildConfig
 import local.daybook.R
 
-@Composable
-fun AnalysisIntro() {
-    Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        GlassCard(Modifier.fillMaxWidth()) {
-            AppIcon(AppGlyph.Chart, Modifier.size(40.dp))
-            Text("每一份投入，都值得看见", style = MaterialTheme.typography.titleLarge)
-            Text("统计功能尚在开发", color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.labelLarge)
-            Text("数值记录、专注时长与贡献热力图将在对应任务功能完成后接入。这里不会把演示曲线当作你的真实数据。",
-                color = MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-        SectionLabel("计划中的统计视角")
-        GlassCard(Modifier.fillMaxWidth()) {
-            InfoRow("趋势", "按日、周、月、年查看记录变化")
-            HorizontalDivider()
-            InfoRow("贡献日历", "查看投入的日期与持续记录")
-            HorizontalDivider()
-            InfoRow("时间线", "追溯补记、修改与任务操作")
-        }
-    }
-}
 
 @Composable
 fun SettingsOverview() {

@@ -51,7 +51,20 @@ def check():
     assert '-PrequireSigning=true' in package_workflow
     ci = (ROOT / '.github/workflows/ci.yml').read_text(encoding='utf-8')
     assert 'secrets.' not in ci
-    assert 'name: app-debug-isolated' in ci
+    assert 'upload-artifact@' not in ci
+    assert ':app:testReleaseUnitTest :app:lintRelease' in ci
+    assert ':app:testReleaseUnitTest :app:lintRelease' in package_workflow
+    workflows = list((ROOT / '.github/workflows').glob('*.yml'))
+    uploads = []
+    for path in workflows:
+        text = path.read_text(encoding='utf-8')
+        assert not re.search(r':app:(?:assembleDebug|testDebugUnitTest|lintDebug)\b', text)
+        if path.name != 'package.yml':
+            assert ':app:assembleRelease' not in text
+        uploads.extend(re.findall(r'uses: actions/upload-artifact@', text))
+    assert len(uploads) == 1, 'Only one signed APK artifact upload is allowed'
+    assert 'path: app/build/distribution/*.apk' in package_workflow
+    assert 'signed-checks' not in package_workflow
     print('PASS: project structure, XML, catalog references, icon dimensions and pinned actions/certificate')
 
 

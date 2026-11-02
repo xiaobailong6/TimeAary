@@ -10,6 +10,9 @@ import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.RoomDatabase
+import kotlinx.coroutines.flow.Flow
+import local.daybook.model.EntrySummary
+import local.daybook.model.DayBucket
 
 @Entity(tableName = "entries", indices = [Index(value = ["kind", "completed", "epochDay", "id"])])
 data class EntryRow(
@@ -26,9 +29,18 @@ data class EntryRow(
 
 @Dao
 interface EntryDao {
-    // 相同日期以 UUID 兜底排序，分页不因并列日期发生漂移。
-    @Query("SELECT * FROM entries WHERE kind = :kind ORDER BY completed, epochDay, id")
-    fun page(kind: String): PagingSource<Int, EntryRow>
+    // 唯一 ID 兜底稳定分页；搜索支持中文子串，% 与 _ 作为普通字符而非通配符。
+    @Query(EntrySql.PAGE)
+    fun page(kind: String, search: String, filter: String, sort: String, today: Long): PagingSource<Int, EntryRow>
+
+    @Query("SELECT * FROM entries WHERE id=:id")
+    fun observe(id: String): Flow<EntryRow?>
+
+    @Query(EntrySql.SUMMARY)
+    fun summary(today: Long): Flow<EntrySummary>
+
+    @Query(EntrySql.DISTRIBUTION)
+    fun distribution(start: Long, endInclusive: Long): Flow<List<DayBucket>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(row: EntryRow)

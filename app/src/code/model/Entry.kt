@@ -17,7 +17,10 @@ data class Entry(
 enum class EntryKind { DATE, TODO }
 
 interface EntryRepository {
-    fun entries(kind: EntryKind): kotlinx.coroutines.flow.Flow<androidx.paging.PagingData<Entry>>
+    fun entries(kind: EntryKind, query: EntryQuery = EntryQuery()): kotlinx.coroutines.flow.Flow<androidx.paging.PagingData<Entry>>
+    fun observe(id: String): kotlinx.coroutines.flow.Flow<Entry?>
+    fun summary(today: LocalDate): kotlinx.coroutines.flow.Flow<EntrySummary>
+    fun distribution(start: LocalDate, endInclusive: LocalDate): kotlinx.coroutines.flow.Flow<List<DayBucket>>
     suspend fun save(entry: Entry)
     suspend fun delete(id: String)
     suspend fun setCompleted(id: String, completed: Boolean)

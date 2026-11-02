@@ -23,7 +23,7 @@ jobs:
       - name: Test build scripts
         run: python3 -m unittest discover -s .github/scripts -p 'test_*.py' -v
       - name: Test and lint before accessing signing key
-        run: gradle --no-daemon :app:testDebugUnitTest :app:lintRelease
+        run: gradle --no-daemon :app:testReleaseUnitTest :app:lintRelease
       - name: Prepare signing material
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -39,27 +39,18 @@ jobs:
         run: gradle --no-daemon -PrequireSigning=true :app:assembleRelease
       - name: Verify signature, identity and package
         run: python3 .github/scripts/signing.py verify
-      - name: Upload signed APK and checksums
+      - name: Upload verified signed APK only
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: app-signed-development
-          path: app/build/distribution/
+          path: app/build/distribution/*.apk
           if-no-files-found: error
           retention-days: 14
       - name: Explain installation channel
         shell: bash
         run: |
           echo '### 固定签名安装包' >> "$GITHUB_STEP_SUMMARY"
-          echo '下载 app-signed-development；包名为 local.daybook。覆盖安装需要与旧包证书一致且版本码不降级。不要使用 CI 的 app-debug-isolated 作为升级包。' >> "$GITHUB_STEP_SUMMARY"
-      - name: Upload check reports and schema
-        if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: signed-checks
-          path: |
-            app/build/reports/
-            app/schemas/
-          retention-days: 7
+          echo '下载 app-signed-development，附件中仅有固定签名 APK。覆盖安装需要与旧包证书一致且版本码不降级；普通 CI 不产出安装包。' >> "$GITHUB_STEP_SUMMARY"
       - name: Remove signing material
         if: always()
         run: python3 .github/scripts/signing.py cleanup
