@@ -1,0 +1,22 @@
+name: Prepare Android toolchain
+description: Install fixed Java, verified Gradle and Android SDK packages
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+      with:
+        distribution: temurin
+        java-version: '17'
+    - name: Install verified Gradle
+      shell: bash
+      run: |
+        set -euo pipefail
+        curl --fail --location --retry 3 https://downloads.gradle.org/distributions/gradle-8.11.1-bin.zip -o "$RUNNER_TEMP/gradle.zip"
+        echo "f397b287023acdba1e9f6fc5ea72d22dd63669d59ed4a289a29b1a76eee151c6  $RUNNER_TEMP/gradle.zip" | sha256sum --check
+        unzip -q "$RUNNER_TEMP/gradle.zip" -d "$RUNNER_TEMP"
+        echo "$RUNNER_TEMP/gradle-8.11.1/bin" >> "$GITHUB_PATH"
+    - name: Install SDK packages
+      shell: bash
+      run: |
+        set -euo pipefail
+        "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" "build-tools;35.0.0"

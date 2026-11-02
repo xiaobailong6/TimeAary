@@ -1,0 +1,59 @@
+name: Signed development APK
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: signed-development
+  cancel-in-progress: false
+jobs:
+  package:
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    environment: signing
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/android
+      - name: Validate project structure
+        run: python3 .github/scripts/check_project.py
+      - name: Test build scripts
+        run: python3 -m unittest discover -s .github/scripts -p 'test_*.py' -v
+      - name: Test and lint before accessing signing key
+        run: gradle --no-daemon :app:testDebugUnitTest :app:lintRelease
+      - name: Prepare signing material
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: python3 .github/scripts/signing.py prepare
+      - name: Build signed development APK
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: gradle --no-daemon :app:assembleRelease
+      - name: Verify signature, identity and package
+        run: python3 .github/scripts/signing.py verify
+      - name: Upload signed APK and checksums
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: app-signed-development
+          path: app/build/distribution/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Upload check reports and schema
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: signed-checks
+          path: |
+            app/build/reports/
+            app/schemas/
+          retention-days: 7
+      - name: Remove signing material
+        if: always()
+        run: python3 .github/scripts/signing.py cleanup

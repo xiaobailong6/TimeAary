@@ -1,0 +1,14 @@
+.gradle/
+.kotlin/
+**/build/
+local.properties
+*.jks
+*.keystore
+*.hprof
+.idea/
+*.iml
+*.p12
+*.pfx
+*secrets*.json
+ANDROID_KEY*.txt
+signing/
