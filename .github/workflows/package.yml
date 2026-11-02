@@ -1,5 +1,6 @@
 name: Signed development APK
 on:
+  push:
   workflow_dispatch:
 permissions:
   contents: read
@@ -35,7 +36,7 @@ jobs:
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-        run: gradle --no-daemon :app:assembleRelease
+        run: gradle --no-daemon -PrequireSigning=true :app:assembleRelease
       - name: Verify signature, identity and package
         run: python3 .github/scripts/signing.py verify
       - name: Upload signed APK and checksums
@@ -45,6 +46,11 @@ jobs:
           path: app/build/distribution/
           if-no-files-found: error
           retention-days: 14
+      - name: Explain installation channel
+        shell: bash
+        run: |
+          echo '### 固定签名安装包' >> "$GITHUB_STEP_SUMMARY"
+          echo '下载 app-signed-development；包名为 local.daybook。覆盖安装需要与旧包证书一致且版本码不降级。不要使用 CI 的 app-debug-isolated 作为升级包。' >> "$GITHUB_STEP_SUMMARY"
       - name: Upload check reports and schema
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

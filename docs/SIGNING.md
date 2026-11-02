@@ -1,59 +1,68 @@
-# 首个签名开发版构建
+# 签名、安装与覆盖升级
 
-## 当前版本与边界
+## 先区分两种安装包
 
-当前构建版本为 `1.0.0-dev`，版本码 `1`，applicationId 为 `local.daybook`。它是基础日期任务 / 待办开发版，不是全功能 `1.0.0` 正式版本。不会自动打标签、创建 Release 或修改仓库内容。
+| 渠道 | Artifact | applicationId | 用途 |
+| --- | --- | --- | --- |
+| 固定签名开发版 | `app-signed-development` | `local.daybook` | 日常安装与连续覆盖升级 |
+| 独立 debug | `app-debug-isolated` | `local.daybook.debug` | 临时调试，与日常包共存，不保证跨 runner 证书稳定 |
 
-普通 `Android checks` 在 push / PR / 手动触发时运行，无需密钥，执行脚本测试、Kotlin 单元测试、Lint、debug 编译与 unsigned release 压缩编译；只上传 debug APK 和检查报告，不分发 unsigned APK。
+当前版本源为 `version.properties`，构建版本名统一增加 `-dev`。本轮版本码 `3`，签名文件名为 `app-1.0.0-dev-3-arm64-v8a.apk`。它仍不是全功能正式版。
 
-`Signed development APK` 仅支持默认分支手动运行，使用 `signing` Environment：脚本测试、单元测试与 release Lint 通过后才解码密钥，再构建 R8 压缩的签名 APK，通过 `apksigner verify`、证书指纹、包名、版本、SDK 与 native ABI 检查后上传 Artifact。
+**能够安装的 APK 已有签名，不等于它使用了固定发布密钥。** Android 默认 debug 签名在全新 GitHub runner 上可能重新生成。旧流程的 app-debug 与固定签名版同用 local.daybook，却证书不同，这是覆盖失败的一条明确风险路径。本轮将 debug 应用身份隔离，不能反向修复已经安装的旧证书包。
 
-## 手动配置 GitHub
+## 如何取得升级包
 
-1. 手动 commit / push 项目文件，不提交任何密钥文件，也不恢复原有 `gradlew` 状态来冒充本轮新文件。
-2. 打开仓库 **Settings → Environments → New environment**，创建名称严格为 `signing` 的环境。允许时设置人工批准者和仅允许默认分支的部署规则。
-3. 在该环境的 **Environment secrets** 中加入下表四项，也可使用同名 Repository secrets；同名 Environment secret 优先。
-4. 每项 Secret 的 Value 是外部签名材料目录中对应 `.txt` 文件的**全部内容**，不是文件路径、文件名、引号或 JSON 对象。
-5. 打开 **Actions → Signed development APK → Run workflow**，选择默认分支，按环境规则批准。
-6. 成功后下载 `app-signed-development` Artifact 并解压，安装其中的 `app-1.0.0-dev-arm64-v8a.apk`。检查报告和生成的 Room schema 在 `signed-checks` 中。
+1. 用户手动 commit / push 代码；代理不执行提交或推送。
+2. 默认分支 push 后，`Signed development APK` 自动执行；仍可在 Actions 手动 Run workflow。其他分支跳过签名 job，PR 不运行签名作业。
+3. 作业使用 `signing` Environment。若配置了人工批准，每次必须批准后才运行，不能误把等待批准当成没有签名产物。
+4. 作业运行脚本测试、Kotlin 单元测试和 release Lint，再解码 Secrets；以 `-PrequireSigning=true` 构建 release，凭据不完整直接失败，不回退为 debug / unsigned 包。
+5. 通过真实 `apksigner verify`、固定证书指纹、包名、版本码、SDK 和 native ABI 检查后，上传 `app-signed-development`。只有成功作业的该 Artifact 才是日常升级渠道。
+6. 解压下载，核对 `build-info.json` 的 commit / versionCode 和证书指纹，再安装。普通 `Android checks` 的 app-debug-isolated 不是升级包。
 
-| Secret 名称 | 取值 |
+工作流不创建 Release、不打标签、不修改远端仓库。自动运行指用户推送触发，与代理提交无关。
+
+## GitHub Secrets 配置
+
+在仓库 Settings → Environments 中创建 `signing`，建议设置默认分支部署限制与人工批准者。在 Environment secrets 中配置四项；也可使用同名 Repository secrets，环境同名值优先。不要将签名权限授予 fork 或 PR 代码。
+
+| Secret | Value |
 | --- | --- |
-| `ANDROID_KEYSTORE_BASE64` | `ANDROID_KEYSTORE_BASE64.txt` 全文，PKCS#12 二进制的 Base64 编码 |
+| `ANDROID_KEYSTORE_BASE64` | 之前提供的 `ANDROID_KEYSTORE_BASE64.txt` 全文，不是文件路径 |
 | `ANDROID_KEYSTORE_PASSWORD` | `ANDROID_KEYSTORE_PASSWORD.txt` 全文 |
 | `ANDROID_KEY_ALIAS` | `ANDROID_KEY_ALIAS.txt` 全文，本次为 `app` |
-| `ANDROID_KEY_PASSWORD` | `ANDROID_KEY_PASSWORD.txt` 全文，本次与存储密码相同 |
+| `ANDROID_KEY_PASSWORD` | `ANDROID_KEY_PASSWORD.txt` 全文 |
 
-不需要配置 `ANDROID_KEYSTORE_PATH`，它由流水线在临时 runner 中解码后自动设置。不要将 Secrets 写入 YAML、Gradle properties、Issue、截图或日志。Base64 不是加密，其保密级别与 keystore 相同。
+`ANDROID_KEYSTORE_PATH` 由流水线解码到 runner 临时目录后自动设置，无需用户配置。Base64 等同私钥材料，不是加密；不得写入源码、日志、截图、Issue 或 Artifact。
 
-## 本次签名身份
+本轮没有重新生成密钥。继续使用原始 `app-signing.p12`（PKCS#12 / RSA-3072）及配套密码。证书 SHA-256 固定为：
 
-- 格式：PKCS#12，文件名 `app-signing.p12`。
-- 别名：`app`。
-- 算法：RSA-3072，证书 SHA256withRSA，自签名，无品牌 / 用户 / 仓库标识。
-- 证书 SHA-256：`2b24963703f956cdfffe56d2b3ddd1b1f6c0b6ebe278f334d9e16407f37b6e56`。
-- 证书 SHA-1：`39d3ca8533e94415efc77be7ac3ad5f3688d46b5`（仅识别用途，不用于安全校验）。
-- CI 固定指纹在 `.github/signing-certificate.sha256`，这是公开证书信息，可以提交；不包含私钥。
-- 实际证书起止日期与 keystore 文件校验和见外部 `certificate-info.json`。
+```text
+2b24963703f956cdfffe56d2b3ddd1b1f6c0b6ebe278f334d9e16407f37b6e56
+```
 
-本次生成材料位于项目之外的会话临时目录，具体路径由生成结果给出。请立即复制到至少两个安全备份位置；临时目录会被清理，不能作为长期保管位置。`github-secrets.json` 和四个 Secret 文本包含敏感数据，建议与密钥一起加密离线保管、不要使用聊天或公开网盘传播。
+公开指纹保存在 `.github/signing-certificate.sha256`，同时由 Gradle 注入 BuildConfig。设置页从 Android 系统读取当前应用实际签名，比对后显示结果；不会仅凭 buildType 显示“签名正确”。仅比较当前签名证书，不实现密钥轮换。
 
-## 文件与验证
+原签名材料在生成时放于项目外会话临时目录，必须自行复制到至少两个长期安全备份位置；不要假设临时目录一直存在。保管 keystore 与配套密码，丢失后不能通过重设 GitHub Secrets 恢复。
 
-外部材料包括 `app-signing.p12`、四份 Secret 文本、`github-secrets.json`、公开证书 `signing-certificate.pem`、`certificate-info.json`。已经本地验证加密 PKCS#12 可读、别名、公私钥匹配、随机消息签名 / 验签、证书自签名与 Base64 往返。尚未使用 JDK keytool 或真实 APK 验证；Java 17 读取和 Android 签名验证由云端流水线执行。
+## 覆盖失败的处理
 
-云端分发内容包括 APK、`SHA256SUMS.txt`、`certificate-sha256.txt`、`build-info.json` 与许可文件；不会上传 keystore、密码、Base64、runner 临时文件或 R8 mapping。临时密钥在作业结束时清理。公开分发前仍须完成全功能、第三方许可、真机、安装及升级验收。
+覆盖安装通常要求**同包名、同证书（本项目不做轮换）、版本码不降级**。同一版本重试不一定需要增加版本码，但向用户分发新更新时本项目要求严格递增。只改文件名或版本名不修复签名冲突。
 
-## 安装、升级与版本
+| 现象 / 检查结果 | 处理 |
+| --- | --- |
+| 新旧均为固定签名 local.daybook | 核对双方证书、版本码，确认没有下载旧 run 的 Artifact |
+| 旧包为先前的 app-debug（也叫 local.daybook） | 必须取得旧 APK / 原签名材料核对。没有旧私钥，不能给新代码签出相同证书；新固定证书不能直接覆盖旧证书 |
+| 新包为 local.daybook.debug | 这是独立调试包，共存不是更新，数据也独立 |
+| 签名工作流失败或等待 Environment 批准 | 查看该 job，确认四项 Secrets、环境名与批准状态；不要转而下载 debug 当升级包 |
+| 证书一样但仍安装失败 | 提供系统具体错误或 adb install 的错误码，继续区分降级、空间、设备策略等原因 |
 
-- debug 包使用临时 debug 签名，不保证跨 runner 一致；不能直接覆盖安装本次签名包。若已装 debug 包，先明确处理数据再卸载；当前没有备份功能，卸载会删除数据。
-- 后续签名开发版和正式版必须沿用相同 applicationId 与本次密钥。丢失密钥后无法正常覆盖升级现有安装，重新生成密码或 Secrets 不会恢复密钥。
-- 每次向用户分发更新时递增 `version.properties` 中 versionCode，并按版本规则调整版本名；当前 `-dev` 在构建层统一添加，不在源码散落硬编码。
-- 正式 `1.0.0` 发布前需要移除开发通道后缀、递增版本码、建立正式标签校验与发布流程；不得给当前基础开发版打 `v1.0.0` 标签。
-- APK 中无 native 库时，ABI filter 不等于禁止在非 ARM64 设备安装；文件名只表达构建目标，不伪造安装限制承诺。
+**旧应用有重要数据时不要先卸载。** 当前尚未实现备份恢复，卸载会删除本地数据。不同签名的同包名应用无法通过修改 Gradle、增加版本码、关闭签名校验等方式无损覆盖。可先保留旧应用，提供新旧 APK（无需密码 / 私钥）及完整错误；必要时再确认能否用旧 debug 包支持的调试方式导出数据，不承诺所有设备可用。
 
-## 排错
+新版设置 → 安装与签名可复制公开诊断：实际包名、版本码、构建类型、证书 SHA-256、固定证书匹配结果。摘要不含任务、备注或密钥。旧版没有诊断入口时需直接检查旧 APK。
 
-- 缺少 Secrets：核对环境名称 `signing` 与四个 Secret 名称；没有密钥不会回退到 debug 签名。
-- 签名不匹配：核对导入的是本次 keystore 及其配套密码 / 别名；不要为让流水线通过随意改指纹。
-- 首轮构建失败：保留 Actions 具体失败步骤与 `signed-checks` / `checks` 报告，再按真实错误修复。当前尚无云端成功结果，不将静态检查当作编译成功。
+## 验证与分发边界
+
+本地独立脚本测试使用合成 fixture 和模拟工具输出来覆盖失败分支，不等同真实 APK 验签。Android 编译、Lint、Kotlin 测试、真实 apksigner 和设备覆盖安装仍在云端 / 真机验证。
+
+签名作业附件包含 APK、SHA256SUMS.txt、certificate-sha256.txt、build-info.json 和许可文件，不包含密钥、密码、Base64 或 R8 mapping。临时密钥在 always 清理步骤删除。ABI filter 与文件名不等同纯 JVM APK 的 ARM64 安装限制；正式发布仍需要完整功能、许可、安装与数据迁移验收。

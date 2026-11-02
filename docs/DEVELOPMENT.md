@@ -96,3 +96,14 @@ version.properties
 - 版本码从 1 递增为 2，版本名仍为 1.0.0-dev。数据库 schema、应用身份、签名指纹及密钥不变，无需重新配置 Secrets。
 - 待办完成筛选、月历、分类搜索和类型扩展仍待实现，不对分页后的已加载条目做伪全量筛选。
 - 本地项目结构检查和现有 8 项 Python 签名脚本测试通过；只读复查指出的越界日期选择器问题已修复。未运行 Android 构建、Compose 仪器测试、截图或真机视觉验收；未 commit / push。
+
+## 第四轮：签名渠道与覆盖升级
+
+- 用户反馈覆盖安装失败；未提供旧 / 新 APK 或系统错误码，因此未断言设备实际失败的唯一原因。确认旧普通 CI 的 debug 包与固定签名版共用 local.daybook，debug 证书可能随全新 runner 改变，是确定的渠道设计风险。
+- 固定签名包保留 local.daybook 与原始证书；debug 隔离为 local.daybook.debug、带调试标签和 -debug 版本后缀，Artifact 为 app-debug-isolated。两渠道数据互不迁移，不把共存称为覆盖升级。
+- Signed development APK 支持默认分支 push 与手动触发，签名 job 保留默认分支限制、signing Environment 与只读权限，PR 不运行签名作业。-PrequireSigning=true 要求完整凭据；真实 APK 验签及固定指纹校验通过才上传。
+- 新版设置从 Android 系统读取当前 APK 实际证书，显示包名、版本名 / 码、构建类型、证书 SHA-256 和固定证书匹配状态，可复制公开诊断。只读取当前应用，不申请查询其他包权限，不读取业务数据或密钥。
+- 版本码递增为 3，签名产物命名 app-1.0.0-dev-3-arm64-v8a.apk。没有重新生成密钥、修改数据库 schema 或更新远程 Secrets。
+- 增加 3 个安装身份 Kotlin 测试，累计 22 个，待云端执行。Python 签名脚本累计 10 项已通过，签名工具失败和版本不匹配阻止产物分发；项目静态结构检查与 git diff --check 通过。
+- 设备旧包证书未知，不能保证覆盖已安装旧 debug 包；必须保留有重要数据的旧应用，核对 APK / 错误码后再处理。当前没有备份恢复功能，不能直接建议卸载或承诺无损迁移。
+- 未执行本地 Android 构建、真实 APK 验签或设备覆盖安装，未 commit / push；后续由用户提交后取得云端结果。

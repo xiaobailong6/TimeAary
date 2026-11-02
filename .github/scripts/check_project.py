@@ -40,6 +40,18 @@ def check():
                 assert (ROOT / reference / 'action.yml').is_file(), reference
             else:
                 assert re.fullmatch(r'[\w-]+/[\w-]+@[a-f0-9]{40}', reference), reference
+    gradle = (ROOT / 'app/build.gradle.kts').read_text(encoding='utf-8')
+    assert 'applicationIdSuffix = ".debug"' in gradle
+    assert 'check(!requireSigning || hasSigning)' in gradle
+    package_workflow = (ROOT / '.github/workflows/package.yml').read_text(encoding='utf-8')
+    assert '  push:' in package_workflow and '  workflow_dispatch:' in package_workflow
+    assert 'pull_request' not in package_workflow
+    assert 'environment: signing' in package_workflow
+    assert "github.event.repository.default_branch" in package_workflow
+    assert '-PrequireSigning=true' in package_workflow
+    ci = (ROOT / '.github/workflows/ci.yml').read_text(encoding='utf-8')
+    assert 'secrets.' not in ci
+    assert 'name: app-debug-isolated' in ci
     print('PASS: project structure, XML, catalog references, icon dimensions and pinned actions/certificate')
 
 

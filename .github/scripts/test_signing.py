@@ -99,7 +99,7 @@ class SigningTests(unittest.TestCase):
         with self.package_fixture():
             signing.verify()
         distribution = self.workspace / 'app/build/distribution'
-        apk = distribution / 'app-1.0.0-dev-arm64-v8a.apk'
+        apk = distribution / 'app-1.0.0-dev-1-arm64-v8a.apk'
         self.assertTrue(apk.exists())
         info = json.loads((distribution / 'build-info.json').read_text())
         self.assertFalse(info['fullFeatureRelease'])
@@ -121,6 +121,20 @@ class SigningTests(unittest.TestCase):
         with self.package_fixture(package='local.other'):
             with self.assertRaisesRegex(ValueError, 'identity'):
                 signing.verify()
+
+    def test_signature_tool_failure_prevents_distribution(self):
+        with self.package_fixture() as tool:
+            tool.side_effect = subprocess.CalledProcessError(1, ['apksigner', 'verify'])
+            with self.assertRaises(subprocess.CalledProcessError):
+                signing.verify()
+        self.assertFalse((self.workspace / 'app/build/distribution').exists())
+
+    def test_version_mismatch_prevents_distribution(self):
+        with self.package_fixture():
+            (self.workspace / 'version.properties').write_text('versionName=1.0.0\nversionCode=2\n')
+            with self.assertRaisesRegex(ValueError, 'version'):
+                signing.verify()
+        self.assertFalse((self.workspace / 'app/build/distribution').exists())
 
 
 if __name__ == '__main__':

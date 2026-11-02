@@ -4,7 +4,7 @@
 
 > 项目状态：已开始工程开发，首批包含公历单次正倒数日、待办、Room 分页与四入口界面，并已配置 GitHub Actions。尚未取得云端构建 / 真机验收结果，不是全功能完成版本。实施状态见 [开发记录](docs/DEVELOPMENT.md)。
 
-- 首个正式版本：`1.0.0`，标签 `v1.0.0`；开发版为 `1.0.0-dev` / `1`，正式发布前递增版本码
+- 首个正式版本：`1.0.0`，标签 `v1.0.0`；当前开发版 `1.0.0-dev` / `3`，正式发布前继续递增版本码
 - 正式发行架构：仅 `arm64-v8a`
 - 开源许可：**GPL-3.0-only**，仅 GNU GPL 第 3 版
 - 详细清单、页面布局与验收：[项目开发要求](PROJECT_REQUIREMENTS.md)
@@ -102,18 +102,18 @@
 ## 5. 云端构建与目录约定
 
 - 本地没有 Android 构建环境，不执行本地 Gradle 编译；Kotlin 单元测试、Lint、debug / release 编译均在 GitHub Actions 运行。
-- 推送或创建 PR 后自动执行 Android checks，也可手动运行；通过后从 `app-debug` 下载 debug 包，从 `checks` 下载报告和 Room schema。普通 CI 额外进行 unsigned release 压缩编译但不上传 unsigned 包。
+- 推送或创建 PR 后运行 Android checks，仅上传 `app-debug-isolated` 独立调试包与 `checks` 报告；debug 使用 `local.daybook.debug`，不用于日常覆盖升级。普通 CI 不接触签名 Secrets，也不上传 unsigned release。
 - 应用源码与路径使用中性命名，不能嵌入项目名、GitHub 用户名、仓库名或地址；品牌只用于展示资源值，远程入口以后由独立配置注入。
 - 不创建 `main` 等目录，实际源码位于 `app/src/code`、资源位于 `app/src/resources`、测试位于 `app/tests`，Manifest 位于 `app/src/AndroidManifest.xml`。
 - 单个 `app` 模块按 `model`、`datetime`、`data`、`ui` 划分职责，不创建空 feature 模块；身份暂定 `local.daybook`，minSdk 26。
 - CI 独立安装固定 Gradle 并校验分发包 SHA-256，不改动已有 `gradlew` 路径的暂存区 / 工作区状态；Wrapper 与正式发布流程尚待补齐。
 - 正式构建仅面向 `arm64-v8a`；没有 `.so` 的纯 Kotlin / Java APK 不会因 ABI 过滤自动变成只允许 ARM64 安装，须分别验证。
-- 已提供手动 `Signed development APK` 工作流，配置四个 Secrets 后生成签名开发版、校验签名 / 包信息 / ABI 并上传 Artifact，不创建正式 Release。配置步骤见 [签名与云端打包](docs/SIGNING.md)。
+- 默认分支推送后自动运行 `Signed development APK`，也可手动触发；需要 signing Environment 中原有四项 Secrets，可能等待人工批准。日常只下载 `app-signed-development`，校验固定证书后产出可连续升级的安装包。具体说明见 [签名与覆盖安装](docs/SIGNING.md)。
 
 ## 6. GitHub Releases 与版本
 
-- 当前实际构建为 `1.0.0-dev` / `1`，只用于基础功能验证；以下 `1.0.0` 正式流程为待实现契约，不得将开发版作为全功能正式版。
-- 正式首版版本名为 `1.0.0`、标签 `v1.0.0`；当前开发版已使用版本码 `1`，正式发布前须递增到更大版本码，版本配置使用唯一来源。
+- 当前实际签名构建为 `1.0.0-dev` / `3`，仅为开发版；以下 `1.0.0` 正式流程为待实现契约，不得将其作为全功能正式版。
+- 正式首版版本名为 `1.0.0`、标签 `v1.0.0`；正式发布前须使用高于全部已分发开发版的版本码，配置以 version.properties 为唯一来源。
 - 每次正式更新同时递增版本名和版本码、维护 CHANGELOG；版本名遵循 SemVer，不复用已发布标签。
 - GitHub Actions 校验标签、版本、更新日志、测试与许可，通过后构建签名 ARM64 APK，验证签名 / 包信息 / ABI。
 - 先创建草稿 Release，附件和说明完整后再公开；失败时不发布 unsigned / debug 包或空 Release。

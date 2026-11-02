@@ -14,6 +14,11 @@ val releaseVersion = Properties().apply {
 val signingValues = listOf("ANDROID_KEYSTORE_PATH", "ANDROID_KEYSTORE_PASSWORD", "ANDROID_KEY_ALIAS", "ANDROID_KEY_PASSWORD")
     .associateWith { System.getenv(it).orEmpty() }
 val hasSigning = signingValues.values.all { it.isNotBlank() }
+// 受控签名作业显式要求密钥，缺失时停止而非静默生成 unsigned 包。
+val requireSigning = providers.gradleProperty("requireSigning").orNull == "true"
+check(!requireSigning || hasSigning) { "Signing credentials are incomplete; refusing unsigned distribution." }
+val expectedCertificate = rootProject.file(".github/signing-certificate.sha256").readText().trim()
+check(expectedCertificate.matches(Regex("[0-9a-f]{64}"))) { "Invalid pinned signing certificate." }
 android {
     namespace = "local.daybook"
     compileSdk = 35
@@ -24,6 +29,8 @@ android {
         targetSdk = 35
         versionCode = releaseVersion.getProperty("versionCode").toInt()
         versionName = releaseVersion.getProperty("versionName") + "-dev"
+        manifestPlaceholders["appLabel"] = "@string/app_label"
+        buildConfigField("String", "SIGNING_CERTIFICATE_SHA256", "\"$expectedCertificate\"")
         ndk { abiFilters += "arm64-v8a" }
     }
     // 使用显式目录，避免默认 main 目录和多余包路径层级。
@@ -52,6 +59,11 @@ android {
         }
     }
     buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
+            manifestPlaceholders["appLabel"] = "@string/app_label_debug"
+        }
         release {
             if (hasSigning) signingConfig = signingConfigs.getByName("distribution")
             isMinifyEnabled = true

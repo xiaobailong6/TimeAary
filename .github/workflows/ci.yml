@@ -23,13 +23,18 @@ jobs:
         run: python3 -m unittest discover -s .github/scripts -p 'test_*.py' -v
       - name: Test, lint and compile
         run: gradle --no-daemon :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleRelease
-      - name: Upload development APK
+      - name: Upload isolated debug APK (not an upgrade package)
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: app-debug
+          name: app-debug-isolated
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           retention-days: 7
+      - name: Explain debug identity
+        shell: bash
+        run: |
+          echo '### 调试包，不用于日常覆盖升级' >> "$GITHUB_STEP_SUMMARY"
+          echo '此包使用 local.daybook.debug，安装后显示调试标识；debug 证书不保证跨 runner 一致。日常升级请下载 Signed development APK 工作流中的 app-signed-development。' >> "$GITHUB_STEP_SUMMARY"
       - name: Upload reports and generated schema
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

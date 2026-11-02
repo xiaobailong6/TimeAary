@@ -80,7 +80,7 @@ def verify():
         raise ValueError('Unexpected development version syntax')
     folder = ROOT / 'app/build/distribution'
     folder.mkdir(parents=True, exist_ok=False)
-    destination = folder / f'app-{version}-arm64-v8a.apk'
+    destination = folder / f'app-{version}-{code}-arm64-v8a.apk'
     shutil.copyfile(apk, destination)
     checksum = hashlib.sha256(destination.read_bytes()).hexdigest()
     (folder / 'SHA256SUMS.txt').write_text(f'{checksum}  {destination.name}\n', encoding='utf-8')
