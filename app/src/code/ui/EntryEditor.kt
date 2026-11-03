@@ -1,8 +1,10 @@
 package local.daybook.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -19,11 +21,14 @@ import androidx.compose.ui.unit.dp
 import java.time.LocalDate
 import local.daybook.datetime.DayCounter
 import local.daybook.datetime.CalendarDates
+import local.daybook.model.Category
+import local.daybook.model.EntryColor
+import local.daybook.model.EntryIcon
 import local.daybook.model.EntryKind
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun EntryEditor(draft: EntryDraft, busy: Boolean, error: String?,
+fun EntryEditor(draft: EntryDraft, categories: List<Category>, busy: Boolean, error: String?,
                 onChange: (EntryDraft) -> Unit, onClose: () -> Unit, onSave: () -> Unit) {
     var confirmExit by rememberSaveable(draft.id) { mutableStateOf(false) }
     var choosingDate by rememberSaveable(draft.id) { mutableStateOf(false) }
@@ -75,6 +80,52 @@ fun EntryEditor(draft: EntryDraft, busy: Boolean, error: String?,
                                     AppIcon(AppGlyph.Calendar)
                                 }
                             })
+                    }
+                    SectionLabel("分类")
+                    GlassCard(Modifier.fillMaxWidth()) {
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            FilterChip(selected = draft.categoryId == null,
+                                onClick = { onChange(draft.copy(categoryId = null)) },
+                                label = { Text("未分类") }, enabled = !busy)
+                            categories.forEach { category ->
+                                FilterChip(selected = draft.categoryId == category.id,
+                                    onClick = { onChange(draft.copy(categoryId = category.id)) },
+                                    label = { Text(category.name) }, enabled = !busy)
+                            }
+                        }
+                        if (categories.isEmpty()) Text("还没有分类，可在列表页的“分类管理”里新增。",
+                            style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    SectionLabel("外观")
+                    GlassCard(Modifier.fillMaxWidth()) {
+                        Text("内容图标", style = MaterialTheme.typography.titleMedium)
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            EntryIcon.entries.forEach { icon ->
+                                FilterChip(selected = draft.icon == icon,
+                                    onClick = { onChange(draft.copy(icon = if (draft.icon == icon) null else icon)) },
+                                    label = { Text(icon.label()) },
+                                    leadingIcon = {
+                                        AppIcon(icon.glyph(), Modifier.size(18.dp),
+                                            tint = (draft.color ?: EntryColor.BLUE).tint())
+                                    },
+                                    enabled = !busy)
+                            }
+                        }
+                        HorizontalDivider()
+                        Text("主题色", style = MaterialTheme.typography.titleMedium)
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            EntryColor.entries.forEach { color ->
+                                ColorDot(color, selected = draft.color == color, enabled = !busy) {
+                                    onChange(draft.copy(color = if (draft.color == color) null else color))
+                                }
+                            }
+                        }
+                        Text("再次点击已选图标或颜色可清除；未选择时按类型使用默认外观。",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     if (draft.kind == EntryKind.DATE) {
                         SectionLabel("如何计算日数")
@@ -144,4 +195,16 @@ fun EntryEditor(draft: EntryDraft, busy: Boolean, error: String?,
         title = { Text("放弃本次编辑？") }, text = { Text("未保存的修改将丢失。") },
         confirmButton = { TextButton(onClick = onClose, enabled = !busy) { Text("放弃修改") } },
         dismissButton = { TextButton(onClick = { confirmExit = false }) { Text("继续编辑") } })
+}
+
+/** 颜色圆点只表达色相，选中态同时用描边与语义描述，不只靠颜色区分。 */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ColorDot(color: EntryColor, selected: Boolean, enabled: Boolean, onClick: () -> Unit) {
+    Surface(onClick = onClick, enabled = enabled, shape = CircleShape,
+        color = color.tint().copy(alpha = if (selected) 1f else 0.35f),
+        border = if (selected) BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface) else null,
+        modifier = Modifier.size(36.dp).semantics {
+            contentDescription = "${color.label()}${if (selected) "，已选择" else ""}"
+        }) {}
 }

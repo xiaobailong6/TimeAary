@@ -15,4 +15,16 @@ object CalendarDates {
     fun toPickerMillis(date: LocalDate): Long = date.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
     fun fromPickerMillis(millis: Long): LocalDate = Instant.ofEpochMilli(millis).atZone(ZoneOffset.UTC).toLocalDate()
     fun weekStart(date: LocalDate): LocalDate = date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+
+    /** 月视图固定 6 行 7 列，跨月日期由调用方淡化显示，不改变日历日含义。 */
+    fun monthStart(date: LocalDate): LocalDate = date.withDayOfMonth(1)
+
+    fun monthGridStart(date: LocalDate): LocalDate = weekStart(monthStart(date))
+
+    fun monthGrid(date: LocalDate): List<LocalDate> {
+        val start = monthGridStart(date)
+        return List(42) { offset -> start.plusDays(offset.toLong()) }
+    }
+
+    fun shiftMonth(date: LocalDate, amount: Long): LocalDate = monthStart(date).plusMonths(amount)
 }

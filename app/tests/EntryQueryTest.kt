@@ -22,6 +22,24 @@ class EntryQueryTest {
         assertEquals(0.5f, EntrySummary(todoCount = 4, completedCount = 2).completionFraction(), 0.001f)
         assertEquals(1f, EntrySummary(todoCount = 1, completedCount = 2).completionFraction(), 0.001f)
     }
+
+    @Test fun legacyThreeItemOptionsStillRestore() {
+        val restored = EntryOptions.decode(listOf("生日", "TODAY", "DATE_DESC"))
+        assertEquals(EntryOptions("生日", EntryFilter.TODAY, EntrySort.DATE_DESC, null), restored)
+    }
+    @Test fun archivedFilterAndCategoryRoundTrip() {
+        val options = EntryOptions("", EntryFilter.ARCHIVED, EntrySort.DATE_ASC, "c1")
+        assertEquals(options, EntryOptions.decode(options.encode()))
+        assertEquals(EntryFilter.ARCHIVED, options.normalized(EntryKind.TODO).filter)
+        assertEquals(EntryFilter.ARCHIVED, options.normalized(EntryKind.DATE).filter)
+        // 归档流不接分类条件，normalized 清空分类；普通列表保留分类。
+        assertNull(options.normalized(EntryKind.DATE).categoryId)
+        assertTrue(options.normalized(EntryKind.TODO).isArchiveStream())
+        assertFalse(EntryOptions(categoryId = "c1").isArchiveStream())
+        assertEquals("c1", EntryOptions(categoryId = "c1").normalized(EntryKind.DATE).categoryId)
+        assertNull(EntryOptions(categoryId = "   ").normalized(EntryKind.DATE).categoryId)
+        assertEquals(64, EntryOptions(categoryId = "c".repeat(100)).normalized(EntryKind.DATE).categoryId!!.length)
+    }
     @Test fun leapMonthAndYearWindows() {
         val month = AnalysisWindow(AnalysisPeriod.MONTH, LocalDate.of(2024, 2, 20))
         assertEquals(LocalDate.of(2024, 2, 1), month.start())

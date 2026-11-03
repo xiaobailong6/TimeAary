@@ -31,9 +31,9 @@ fun AnalysisContent(state: AppViewModel) {
         when (val result = summary) {
             ReadState.Loading -> LinearProgressIndicator(Modifier.fillMaxWidth())
             is ReadState.Failed -> ReadErrorCard(result.message, state::retryReads)
-            is ReadState.Ready -> {
-                val totals = result.value
-                GlassCard(Modifier.fillMaxWidth()) {
+            else -> {
+                val totals = result.valueOrNull()
+                if (totals != null) GlassCard(Modifier.fillMaxWidth()) {
                     Text("待办完成 ${totals.completedCount} / ${totals.todoCount}", style = MaterialTheme.typography.titleLarge)
                     LinearProgressIndicator(progress = { totals.completionFraction() }, modifier = Modifier.fillMaxWidth())
                     Text(if (totals.todoCount == 0L) "还没有待办，完成比例按 0% 显示。"
@@ -42,17 +42,17 @@ fun AnalysisContent(state: AppViewModel) {
                     Text("未完成：${totals.todoCount - totals.completedCount} 项")
                     Text("逾期未完成：${totals.overdueCount} 项", color = MaterialTheme.colorScheme.error)
                     Text("日期记录：${totals.dateCount} 项，其中今天及未来 ${totals.upcomingDateCount} 项")
+                    if (totals.archivedCount > 0L) Text(
+                        "另有 ${totals.archivedCount} 条已归档记录，不计入以上任何统计。",
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }
         SectionLabel("计划日期分布")
         GlassCard(Modifier.fillMaxWidth()) {
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                AnalysisPeriod.entries.forEach { period ->
-                    FilterChip(selected = window.period == period, onClick = { state.setAnalysisPeriod(period) },
-                        label = { Text(when (period) { AnalysisPeriod.WEEK -> "周"; AnalysisPeriod.MONTH -> "月"; AnalysisPeriod.YEAR -> "年" }) })
-                }
-            }
+            GlassSegmentedControl(options = AnalysisPeriod.entries.toList(), selected = window.period,
+                label = { when (it) { AnalysisPeriod.WEEK -> "周"; AnalysisPeriod.MONTH -> "月"; AnalysisPeriod.YEAR -> "年" } },
+                onSelect = { state.setAnalysisPeriod(it) })
             Text("${window.start()} 至 ${window.endInclusive()}", style = MaterialTheme.typography.titleMedium)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 TextButton(onClick = { state.moveAnalysis(-1) }, enabled = window.shifted(-1).anchor.year >= 1900) { Text("上一期间") }
@@ -64,10 +64,11 @@ fun AnalysisContent(state: AppViewModel) {
             when (val result = distribution) {
                 ReadState.Loading -> LinearProgressIndicator(Modifier.fillMaxWidth())
                 is ReadState.Failed -> ReadErrorCard(result.message, state::retryReads)
-                is ReadState.Ready -> {
-                    if (result.value.first != window) LinearProgressIndicator(Modifier.fillMaxWidth())
+                else -> {
+                    val loaded = result.valueOrNull()
+                    if (loaded == null || loaded.first != window) LinearProgressIndicator(Modifier.fillMaxWidth())
                     else {
-                        val points = remember(window, result.value.second) { distributionPoints(window, result.value.second) }
+                        val points = remember(window, loaded.second) { distributionPoints(window, loaded.second) }
                         DistributionChart(points, window)
                     }
                 }

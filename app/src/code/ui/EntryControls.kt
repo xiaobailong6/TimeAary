@@ -15,6 +15,7 @@ fun EntryFilter.label(): String = when (this) {
     EntryFilter.OPEN -> "未完成"
     EntryFilter.DONE -> "已完成"
     EntryFilter.OVERDUE -> "逾期未完成"
+    EntryFilter.ARCHIVED -> "已归档"
 }
 fun EntrySort.label(): String = when (this) {
     EntrySort.DATE_ASC -> "日期从早到晚"
@@ -24,7 +25,8 @@ fun EntrySort.label(): String = when (this) {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun EntryControls(kind: EntryKind, options: EntryOptions, onChange: (EntryOptions) -> Unit) {
+fun EntryControls(kind: EntryKind, options: EntryOptions, categories: List<Category>,
+                  onChange: (EntryOptions) -> Unit, onManageCategories: () -> Unit) {
     var sorting by remember { mutableStateOf(false) }
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         OutlinedTextField(value = options.search, onValueChange = { onChange(options.copy(search = it.take(80))) },
@@ -32,15 +34,28 @@ fun EntryControls(kind: EntryKind, options: EntryOptions, onChange: (EntryOption
             label = { Text("搜索标题或备注") },
             trailingIcon = { if (options.search.isNotEmpty()) TextButton(onClick = { onChange(options.copy(search = "")) }) { Text("清除") } })
         val filters = if (kind == EntryKind.DATE)
-            listOf(EntryFilter.ALL, EntryFilter.TODAY, EntryFilter.FUTURE, EntryFilter.PAST)
-        else listOf(EntryFilter.ALL, EntryFilter.OPEN, EntryFilter.DONE, EntryFilter.TODAY, EntryFilter.OVERDUE)
+            listOf(EntryFilter.ALL, EntryFilter.TODAY, EntryFilter.FUTURE, EntryFilter.PAST, EntryFilter.ARCHIVED)
+        else listOf(EntryFilter.ALL, EntryFilter.OPEN, EntryFilter.DONE, EntryFilter.TODAY, EntryFilter.OVERDUE,
+            EntryFilter.ARCHIVED)
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             filters.forEach { filter ->
                 FilterChip(selected = options.filter == filter,
                     onClick = { onChange(options.copy(filter = filter)) }, label = { Text(filter.label()) })
             }
         }
-        Row {
+        if (categories.isNotEmpty()) {
+            // 分类筛选在数据库执行；未分类条目不并入任何分类结果。
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FilterChip(selected = options.categoryId == null,
+                    onClick = { onChange(options.copy(categoryId = null)) }, label = { Text("全部分类") })
+                categories.forEach { category ->
+                    FilterChip(selected = options.categoryId == category.id,
+                        onClick = { onChange(options.copy(categoryId = category.id)) },
+                        label = { Text(category.name) })
+                }
+            }
+        }
+        Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
             Box {
                 TextButton(onClick = { sorting = true }) { Text(options.sort.label()) }
                 DropdownMenu(expanded = sorting, onDismissRequest = { sorting = false }) {
@@ -50,6 +65,7 @@ fun EntryControls(kind: EntryKind, options: EntryOptions, onChange: (EntryOption
                     }
                 }
             }
+            TextButton(onClick = onManageCategories) { Text("分类管理") }
             Spacer(Modifier.weight(1f))
             if (options != EntryOptions()) TextButton(onClick = { onChange(EntryOptions()) }) { Text("重置条件") }
         }

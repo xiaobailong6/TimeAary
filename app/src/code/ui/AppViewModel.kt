@@ -11,6 +11,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import local.daybook.data.MemorySettingsStore
+import local.daybook.data.SettingsStore
 import local.daybook.model.*
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
@@ -18,6 +20,7 @@ class AppViewModel(
     private val repository: EntryRepository,
     private val savedState: SavedStateHandle,
     private val clock: Clock = Clock.systemDefaultZone(),
+    private val settingsStore: SettingsStore = MemorySettingsStore(),
 ) : ViewModel() {
     private val mutableToday = MutableStateFlow(LocalDate.now(clock))
     val today = mutableToday.asStateFlow()
@@ -58,6 +61,22 @@ class AppViewModel(
         repository.distribution(it.start(), it.endInclusive()).map { buckets -> it to buckets }
             .asReadState("无法读取日期分布，请重试。")
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ReadState.Loading)
+    // 分类与筛选条件一起来自数据库，分类被删除后列表立即回到未筛选状态。
+    val categories = combine(repository.categories(), retryToken) { list, _ -> list }
+        .asReadState("无法读取分类，请重试。")
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ReadState.Loading)
+
+    // 外观设置同步读取（文件极小），改动后立即写回并驱动整棵界面重组。
+    private val mutableSettings = MutableStateFlow(settingsStore.load())
+    val settings = mutableSettings.asStateFlow()
+    // 批量选择只保存 ID，进程恢复后仍能继续操作同一批记录。
+    private val mutableSelection = MutableStateFlow(savedState.get<List<String>>("selection").orEmpty())
+    val selection = mutableSelection.asStateFlow()
+
+    // 轻量提示队列：只承载“刚刚发生了什么”，失败仍在页面内持久展示。
+    private val mutableMessages = MutableStateFlow<List<AppMessage>>(emptyList())
+    val messages = mutableMessages.asStateFlow()
+    private var messageCounter = 0L
 
     private fun paging(kind: EntryKind, options: StateFlow<EntryOptions>) = combine(options, reference) { value, date ->
         EntryQuery(value.copy(search = value.search.trim()), date)
@@ -100,23 +119,98 @@ class AppViewModel(
             require(draft.note.length <= 4000) { "备注最多 4000 个字符" }
             require(date.year in 1900..2200) { "日期须在 1900～2200 年之间" }
             repository.save(Entry(draft.id, draft.title.trim(), draft.note,
-                date, draft.kind, draft.countUp, draft.includeFirstDay))
+                date, draft.kind, draft.countUp, draft.includeFirstDay, categoryId = draft.categoryId))
             storeDraft(null)
         }
     }
-    fun delete(id: String) = execute {
+    fun delete(id: String) = execute(success = "已删除这条记录") {
         repository.delete(id)
         if (detailId.value == id) savedState["detailId"] = null
     }
-    fun complete(entry: Entry) = execute { repository.setCompleted(entry.id, !entry.completed) }
+    fun complete(entry: Entry) = execute(success = "已更新完成状态") {
+        repository.setCompleted(entry.id, !entry.completed)
+    }
+    fun setPinned(entry: Entry, pinned: Boolean) = execute(success = if (pinned) "已置顶" else "已取消置顶") {
+        repository.setPinned(entry.id, pinned)
+    }
+    fun archive(entry: Entry) = execute(success = "已归档，可在“已归档”里恢复") {
+        repository.archive(entry.id, ArchiveReason.MANUAL)
+    }
+    fun restore(entry: Entry) = execute(success = "已恢复为未归档") {
+        repository.restore(entry.id)
+    }
 
+    fun createCategory(name: String) = execute(success = "已新增分类") { repository.createCategory(name) }
+    fun renameCategory(id: String, name: String) = execute { repository.renameCategory(id, name) }
+    fun moveCategory(id: String, offset: Int) = execute { repository.moveCategory(id, offset) }
+    fun deleteCategory(id: String) = execute(success = "已删除分类，记录回到未分类") {
+        repository.deleteCategory(id)
+        // 条目已迁移到未分类，当前按该分类筛选的列表随之回到全部分类。
+        listOf(EntryKind.DATE to mutableDateOptions, EntryKind.TODO to mutableTodoOptions).forEach { (kind, options) ->
+            if (options.value.categoryId == id) updateOptions(kind, options.value.copy(categoryId = null))
+        }
+    }
+
+    /** 同文案去重，最多保留 3 条；提示只做反馈，不作为失败状态的唯一载体。 */
+    fun notify(text: String) {
+        if (text.isBlank() || mutableMessages.value.any { it.text == text }) return
+        messageCounter += 1
+        mutableMessages.value = (mutableMessages.value + AppMessage(messageCounter, text)).takeLast(3)
+    }
+
+    fun dismissMessage(id: Long) {
+        mutableMessages.value = mutableMessages.value.filterNot { it.id == id }
+    }
+
+    fun updateSettings(next: AppSettings) {
+        val normalized = next.normalized()
+        settingsStore.save(normalized)
+        mutableSettings.value = normalized
+    }
+
+    fun toggleSelection(id: String) {
+        val current = mutableSelection.value
+        storeSelection(if (id in current) current - id else current + id)
+    }
+
+    fun selectAll(ids: List<String>) = storeSelection(ids.distinct())
+    fun clearSelection() = storeSelection(emptyList())
+
+    fun batchDelete() {
+        val ids = mutableSelection.value
+        if (ids.isEmpty()) return
+        execute(success = "已删除 ${ids.size} 条记录") {
+            repository.deleteMany(ids)
+            storeSelection(emptyList())
+            if (detailId.value in ids) savedState["detailId"] = null
+        }
+    }
+
+    fun batchAssignCategory(categoryId: String?) {
+        val ids = mutableSelection.value
+        if (ids.isEmpty()) return
+        execute(success = if (categoryId == null) "已设为未分类" else "已移动到所选分类") {
+            repository.assignCategoryMany(ids, categoryId)
+            storeSelection(emptyList())
+        }
+    }
+
+    private fun storeSelection(ids: List<String>) {
+        val clean = ids.distinct()
+        savedState["selection"] = ArrayList(clean)
+        mutableSelection.value = clean
+    }
     private fun storeDraft(draft: EntryDraft?) { savedState["draft"] = draft?.encode(); mutableDraft.value = draft }
-    private fun execute(operation: suspend () -> Unit) {
+    private fun execute(success: String? = null, operation: suspend () -> Unit) {
         if (mutableBusy.value) return
         mutableBusy.value = true
         mutableError.value = null
         viewModelScope.launch {
-            try { operation() }
+            try {
+                operation()
+                // 成功提示只解释“刚刚发生了什么”，失败仍留在页面内的持久错误卡。
+                if (success != null) notify(success)
+            }
             catch (cancelled: CancellationException) { throw cancelled }
             catch (invalid: IllegalArgumentException) { mutableError.value = invalid.message }
             catch (_: Exception) { mutableError.value = "操作失败，数据未确认保存。请重试并检查存储空间。" }

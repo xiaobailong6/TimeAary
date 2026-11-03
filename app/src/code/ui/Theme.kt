@@ -14,6 +14,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import local.daybook.model.AppSettings
+import local.daybook.model.ThemeMode
 
 private val LightPalette = lightColorScheme(
     primary = Color(0xFF245EC7), onPrimary = Color.White,
@@ -41,12 +43,35 @@ private val AppTypography = Typography(
     bodyLarge = TextStyle(fontSize = 16.sp, lineHeight = 25.sp),
     bodyMedium = TextStyle(fontSize = 14.sp, lineHeight = 22.sp),
     labelLarge = TextStyle(fontSize = 14.sp, lineHeight = 20.sp, fontWeight = FontWeight.Medium),
+    labelMedium = TextStyle(fontSize = 12.sp, lineHeight = 16.sp, fontWeight = FontWeight.Medium),
+    labelSmall = TextStyle(fontSize = 11.sp, lineHeight = 16.sp, fontWeight = FontWeight.Medium),
 )
 
+/** 应用内字号只缩放已定义的样式，系统字体缩放会在 sp 之上继续叠加。 */
+private fun Typography.scaled(factor: Float): Typography = if (factor == 1f) this else Typography(
+    headlineLarge = headlineLarge.grow(factor),
+    headlineMedium = headlineMedium.grow(factor),
+    titleLarge = titleLarge.grow(factor),
+    titleMedium = titleMedium.grow(factor),
+    bodyLarge = bodyLarge.grow(factor),
+    bodyMedium = bodyMedium.grow(factor),
+    labelLarge = labelLarge.grow(factor),
+    labelMedium = labelMedium.grow(factor),
+    labelSmall = labelSmall.grow(factor),
+)
+
+private fun TextStyle.grow(factor: Float) =
+    copy(fontSize = fontSize * factor, lineHeight = lineHeight * factor)
+
 @Composable
-fun AppTheme(content: @Composable () -> Unit) {
-    MaterialTheme(colorScheme = if (isSystemInDarkTheme()) DarkPalette else LightPalette,
-        typography = AppTypography, content = content)
+fun AppTheme(settings: AppSettings = AppSettings(), content: @Composable () -> Unit) {
+    val dark = when (settings.themeMode) {
+        ThemeMode.SYSTEM -> isSystemInDarkTheme()
+        ThemeMode.LIGHT -> false
+        ThemeMode.DARK -> true
+    }
+    MaterialTheme(colorScheme = if (dark) DarkPalette else LightPalette,
+        typography = AppTypography.scaled(settings.fontScale.factor), content = content)
 }
 
 /** 所有页面共享静态材质；只绘制容器背景，不模糊文字或建立实时采样链。 */
