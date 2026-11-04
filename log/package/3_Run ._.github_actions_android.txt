@@ -1,0 +1,87 @@
+﻿2026-11-04T02:16:48.5109066Z Prepare all required actions
+2026-11-04T02:16:48.5109702Z Getting action download info
+2026-11-04T02:16:48.6109535Z Download action repository 'actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3' (SHA:cf277c60eb25467037889841efdb72551f06f6c3)
+2026-11-04T02:16:49.3360076Z ##[group]Run ./.github/actions/android
+2026-11-04T02:16:49.3360393Z ##[endgroup]
+2026-11-04T02:16:49.3417989Z ##[start-action display=Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3;id=__self.__actions_setup-java]
+2026-11-04T02:16:49.3526869Z ##[group]Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+2026-11-04T02:16:49.3527286Z with:
+2026-11-04T02:16:49.3527513Z   distribution: temurin
+2026-11-04T02:16:49.3527746Z   java-version: 17
+2026-11-04T02:16:49.3527973Z   java-package: jdk
+2026-11-04T02:16:49.3528194Z   check-latest: false
+2026-11-04T02:16:49.3528412Z   server-id: github
+2026-11-04T02:16:49.3528638Z   server-username: GITHUB_ACTOR
+2026-11-04T02:16:49.3528912Z   server-password: GITHUB_TOKEN
+2026-11-04T02:16:49.3529218Z   overwrite-settings: true
+2026-11-04T02:16:49.3529464Z   job-status: success
+2026-11-04T02:16:49.3531935Z   token: ***
+2026-11-04T02:16:49.3532141Z ##[endgroup]
+2026-11-04T02:16:49.5786931Z ##[warning]setup-java v4 is deprecated and will no longer receive updates. Please migrate to actions/setup-java@v5.
+2026-11-04T02:16:49.5788575Z ##[group]Installed distributions
+2026-11-04T02:16:49.5956618Z Resolved Java 17.0.21+9 from tool-cache
+2026-11-04T02:16:49.5957138Z Setting Java 17.0.21+9 as the default
+2026-11-04T02:16:49.5969033Z (node:2408) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-04T02:16:49.5970496Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-04T02:16:49.5972165Z Creating toolchains.xml for JDK version 17 from temurin
+2026-11-04T02:16:49.6048678Z Writing to /home/runner/.m2/toolchains.xml
+2026-11-04T02:16:49.6049153Z 
+2026-11-04T02:16:49.6049368Z Java configuration:
+2026-11-04T02:16:49.6049899Z   Distribution: temurin
+2026-11-04T02:16:49.6051640Z   Version: 17.0.21+9
+2026-11-04T02:16:49.6052467Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-04T02:16:49.6053254Z 
+2026-11-04T02:16:49.6053626Z ##[endgroup]
+2026-11-04T02:16:49.6068032Z Creating settings.xml with server-id: github
+2026-11-04T02:16:49.6096849Z Writing to /home/runner/.m2/settings.xml
+2026-11-04T02:16:49.6239011Z ##[end-action id=__self.__actions_setup-java;outcome=success;conclusion=success;duration_ms=281]
+2026-11-04T02:16:49.6243051Z ##[start-action display=Install verified Gradle;id=__self.__run]
+2026-11-04T02:16:49.6285585Z ##[group]Run set -euo pipefail
+2026-11-04T02:16:49.6286108Z [36;1mset -euo pipefail[0m
+2026-11-04T02:16:49.6287154Z [36;1mcurl --fail --location --retry 3 https://downloads.gradle.org/distributions/gradle-8.11.1-bin.zip -o "$RUNNER_TEMP/gradle.zip"[0m
+2026-11-04T02:16:49.6288977Z [36;1mecho "f397b287023acdba1e9f6fc5ea72d22dd63669d59ed4a289a29b1a76eee151c6  $RUNNER_TEMP/gradle.zip" | sha256sum --check[0m
+2026-11-04T02:16:49.6290149Z [36;1munzip -q "$RUNNER_TEMP/gradle.zip" -d "$RUNNER_TEMP"[0m
+2026-11-04T02:16:49.6290854Z [36;1mecho "$RUNNER_TEMP/gradle-8.11.1/bin" >> "$GITHUB_PATH"[0m
+2026-11-04T02:16:49.6322253Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-04T02:16:49.6322975Z env:
+2026-11-04T02:16:49.6323343Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-04T02:16:49.6323887Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-04T02:16:49.6324276Z ##[endgroup]
+2026-11-04T02:16:49.6510439Z   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+2026-11-04T02:16:49.6512019Z                                  Dload  Upload   Total   Spent    Left  Speed
+2026-11-04T02:16:49.6512358Z 
+2026-11-04T02:16:49.7650691Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2026-11-04T02:16:49.7651701Z 100   169  100   169    0     0   1479      0 --:--:-- --:--:-- --:--:--  1482
+2026-11-04T02:16:49.8883699Z 
+2026-11-04T02:16:49.8884211Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2026-11-04T02:16:50.0429604Z 
+2026-11-04T02:16:51.0909344Z   0  130M    0 64692    0     0   161k      0  0:13:49 --:--:--  0:13:49  161k
+2026-11-04T02:16:51.6556271Z  46  130M   46 60.1M    0     0  41.7M      0  0:00:03  0:00:01  0:00:02 57.3M
+2026-11-04T02:16:51.6556892Z 100  130M  100  130M    0     0  65.1M      0  0:00:02  0:00:02 --:--:-- 80.9M
+2026-11-04T02:16:51.7608827Z /home/runner/work/_temp/gradle.zip: OK
+2026-11-04T02:16:52.7429497Z ##[end-action id=__self.__run;outcome=success;conclusion=success;duration_ms=3118]
+2026-11-04T02:16:52.7432861Z ##[start-action display=Install SDK packages;id=__self.__run_2]
+2026-11-04T02:16:52.7452239Z ##[group]Run set -euo pipefail
+2026-11-04T02:16:52.7452862Z [36;1mset -euo pipefail[0m
+2026-11-04T02:16:52.7453380Z [36;1m"$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" "build-tools;35.0.0"[0m
+2026-11-04T02:16:52.7473256Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-04T02:16:52.7473612Z env:
+2026-11-04T02:16:52.7473934Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-04T02:16:52.7474460Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-04T02:16:52.7474855Z ##[endgroup]
+2026-11-04T02:16:58.2862289Z Loading package information...                                                  
+2026-11-04T02:16:58.3698770Z Loading local repository...                                                     
+2026-11-04T02:16:58.3701541Z [                                       ] 3% Loading local repository...        
+2026-11-04T02:16:59.8976418Z [                                       ] 3% Fetch remote repository...         
+2026-11-04T02:17:00.4006830Z [=                                      ] 3% Fetch remote repository...         
+2026-11-04T02:17:00.4931424Z [=                                      ] 4% Fetch remote repository...         
+2026-11-04T02:17:00.5361892Z [=                                      ] 5% Fetch remote repository...         
+2026-11-04T02:17:00.5919926Z [==                                     ] 5% Fetch remote repository...         
+2026-11-04T02:17:00.6844659Z [==                                     ] 6% Fetch remote repository...         
+2026-11-04T02:17:00.8938905Z [==                                     ] 7% Fetch remote repository...         
+2026-11-04T02:17:00.8963597Z [==                                     ] 7% Computing updates...               
+2026-11-04T02:17:00.9065575Z [===                                    ] 8% Computing updates...               
+2026-11-04T02:17:00.9134322Z [===                                    ] 10% Computing updates...              
+2026-11-04T02:17:00.9135495Z [=======================================] 100% Computing updates...             
+2026-11-04T02:17:00.9138019Z 
+2026-11-04T02:17:00.9563610Z ##[end-action id=__self.__run_2;outcome=success;conclusion=success;duration_ms=8212]

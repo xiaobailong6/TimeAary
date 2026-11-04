@@ -1,0 +1,48 @@
+﻿2026-11-04T02:17:01.0333191Z ##[group]Run python3 -m unittest discover -s .github/scripts -p 'test_*.py' -v
+2026-11-04T02:17:01.0333841Z [36;1mpython3 -m unittest discover -s .github/scripts -p 'test_*.py' -v[0m
+2026-11-04T02:17:01.0353943Z shell: /usr/bin/bash -e {0}
+2026-11-04T02:17:01.0354210Z env:
+2026-11-04T02:17:01.0354540Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-04T02:17:01.0355066Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-04T02:17:01.0355460Z ##[endgroup]
+2026-11-04T02:17:01.2740212Z test_archive_keeps_first_timestamp_and_ignores_repeat (test_entry_sql.EntrySqlTests.test_archive_keeps_first_timestamp_and_ignores_repeat) ... ok
+2026-11-04T02:17:01.2747810Z test_archive_moves_record_between_lists_and_pauses_counts (test_entry_sql.EntrySqlTests.test_archive_moves_record_between_lists_and_pauses_counts) ... ok
+2026-11-04T02:17:01.2754090Z test_archive_page_is_separate_searchable_and_newest_first (test_entry_sql.EntrySqlTests.test_archive_page_is_separate_searchable_and_newest_first) ... ok
+2026-11-04T02:17:01.2759971Z test_ascii_search_is_case_insensitive_in_title_and_note (test_entry_sql.EntrySqlTests.test_ascii_search_is_case_insensitive_in_title_and_note) ... ok
+2026-11-04T02:17:01.2767129Z test_batch_assign_category_moves_only_selected_rows (test_entry_sql.EntrySqlTests.test_batch_assign_category_moves_only_selected_rows) ... ok
+2026-11-04T02:17:01.2773003Z test_batch_delete_removes_only_selected_rows (test_entry_sql.EntrySqlTests.test_batch_delete_removes_only_selected_rows) ... ok
+2026-11-04T02:17:01.2777574Z test_categories_list_uses_position_then_case_insensitive_name (test_entry_sql.EntrySqlTests.test_categories_list_uses_position_then_case_insensitive_name) ... ok
+2026-11-04T02:17:01.2783688Z test_category_filter_combines_with_search_and_archive_state (test_entry_sql.EntrySqlTests.test_category_filter_combines_with_search_and_archive_state) ... ok
+2026-11-04T02:17:01.2789784Z test_category_filter_isolates_and_excludes_uncategorized (test_entry_sql.EntrySqlTests.test_category_filter_isolates_and_excludes_uncategorized) ... ok
+2026-11-04T02:17:01.2794853Z test_chinese_note_substring (test_entry_sql.EntrySqlTests.test_chinese_note_substring) ... ok
+2026-11-04T02:17:01.2799887Z test_chinese_title_substring_and_kind_isolation (test_entry_sql.EntrySqlTests.test_chinese_title_substring_and_kind_isolation) ... ok
+2026-11-04T02:17:01.2807199Z test_completion_updates_page_summary_and_distribution (test_entry_sql.EntrySqlTests.test_completion_updates_page_summary_and_distribution) ... ok
+2026-11-04T02:17:01.2813454Z test_date_filters_have_strict_boundaries_and_bound_today (test_entry_sql.EntrySqlTests.test_date_filters_have_strict_boundaries_and_bound_today) ... ok
+2026-11-04T02:17:01.2820024Z test_delete_category_migrates_records_without_deleting_them (test_entry_sql.EntrySqlTests.test_delete_category_migrates_records_without_deleting_them) ... ok
+2026-11-04T02:17:01.2826211Z test_delete_updates_page_summary_and_distribution (test_entry_sql.EntrySqlTests.test_delete_updates_page_summary_and_distribution) ... ok
+2026-11-04T02:17:01.2830937Z test_distribution_exact_inclusive_range_and_order (test_entry_sql.EntrySqlTests.test_distribution_exact_inclusive_range_and_order) ... ok
+2026-11-04T02:17:01.2838701Z test_edit_date_updates_filters_search_summary_and_distribution (test_entry_sql.EntrySqlTests.test_edit_date_updates_filters_search_summary_and_distribution) ... ok
+2026-11-04T02:17:01.2844379Z test_empty_summary_has_zero_counts (test_entry_sql.EntrySqlTests.test_empty_summary_has_zero_counts) ... ok
+2026-11-04T02:17:01.2849146Z test_icon_and_color_are_saved_changed_and_cleared (test_entry_sql.EntrySqlTests.test_icon_and_color_are_saved_changed_and_cleared) ... ok
+2026-11-04T02:17:01.2854568Z test_injection_like_search_is_bound_not_executed (test_entry_sql.EntrySqlTests.test_injection_like_search_is_bound_not_executed) ... ok
+2026-11-04T02:17:01.2859622Z test_percent_and_underscore_are_literal (test_entry_sql.EntrySqlTests.test_percent_and_underscore_are_literal) ... ok
+2026-11-04T02:17:01.2865634Z test_pinned_records_stay_first_within_the_same_list (test_entry_sql.EntrySqlTests.test_pinned_records_stay_first_within_the_same_list) ... ok
+2026-11-04T02:17:01.2874876Z test_search_reaches_beyond_thirty_loaded_rows (test_entry_sql.EntrySqlTests.test_search_reaches_beyond_thirty_loaded_rows) ... ok
+2026-11-04T02:17:01.2880731Z test_sort_modes_use_uuid_tiebreak_and_completed_last (test_entry_sql.EntrySqlTests.test_sort_modes_use_uuid_tiebreak_and_completed_last) ... ok
+2026-11-04T02:17:01.2885379Z test_summary_exact_counts_and_today_boundary (test_entry_sql.EntrySqlTests.test_summary_exact_counts_and_today_boundary) ... ok
+2026-11-04T02:17:01.2890404Z test_todo_open_done_and_overdue (test_entry_sql.EntrySqlTests.test_todo_open_done_and_overdue) ... ok
+2026-11-04T02:17:01.2929631Z test_distribution_contains_only_verified_apk (test_signing.SigningTests.test_distribution_contains_only_verified_apk) ... ok
+2026-11-04T02:17:01.2939599Z test_invalid_base64_rejected (test_signing.SigningTests.test_invalid_base64_rejected) ... ok
+2026-11-04T02:17:01.2950749Z test_missing_secrets_rejected_before_any_file_is_written (test_signing.SigningTests.test_missing_secrets_rejected_before_any_file_is_written) ... ok
+2026-11-04T02:17:01.2960566Z test_oversized_secret_rejected (test_signing.SigningTests.test_oversized_secret_rejected) ... ok
+2026-11-04T02:17:01.2976077Z test_prepare_exports_path_without_logging_secrets_and_cleanup_is_idempotent (test_signing.SigningTests.test_prepare_exports_path_without_logging_secrets_and_cleanup_is_idempotent) ... ok
+2026-11-04T02:17:01.2996989Z test_signature_tool_failure_prevents_distribution (test_signing.SigningTests.test_signature_tool_failure_prevents_distribution) ... ok
+2026-11-04T02:17:01.3022077Z test_version_mismatch_prevents_distribution (test_signing.SigningTests.test_version_mismatch_prevents_distribution) ... ok
+2026-11-04T02:17:01.3045573Z test_wrong_***lication_identity_rejected (test_signing.SigningTests.test_wrong_***lication_identity_rejected) ... ok
+2026-11-04T02:17:01.3069108Z test_wrong_native_architecture_rejected (test_signing.SigningTests.test_wrong_native_architecture_rejected) ... ok
+2026-11-04T02:17:01.3090759Z test_wrong_signer_rejected (test_signing.SigningTests.test_wrong_signer_rejected) ... ok
+2026-11-04T02:17:01.3091366Z 
+2026-11-04T02:17:01.3091597Z ----------------------------------------------------------------------
+2026-11-04T02:17:01.3092102Z Ran 36 tests in 0.037s
+2026-11-04T02:17:01.3092308Z 
+2026-11-04T02:17:01.3092420Z OK

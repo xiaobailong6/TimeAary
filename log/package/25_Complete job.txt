@@ -1,0 +1,3 @@
+﻿2026-11-04T02:19:54.1490827Z Cleaning up orphan processes
+2026-11-04T02:19:54.1814028Z Terminate orphan process: pid (2791) (java)
+2026-11-04T02:19:54.1883534Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

@@ -1,0 +1,6 @@
+﻿2026-11-04T02:19:53.7696382Z Post job cleanup.
+2026-11-04T02:19:53.7701850Z ##[start-action display=Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3;id=__aef8a527-fe44-4093-957a-faf37bcad1b7.__actions_setup-java]
+2026-11-04T02:19:53.7810866Z Post job cleanup.
+2026-11-04T02:19:53.9346614Z (node:3010) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-04T02:19:53.9348435Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-04T02:19:53.9517480Z ##[end-action id=__aef8a527-fe44-4093-957a-faf37bcad1b7.__actions_setup-java;outcome=success;conclusion=success;duration_ms=181]

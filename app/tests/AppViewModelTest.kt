@@ -33,6 +33,7 @@ import local.daybook.model.EntryRepository
 import local.daybook.data.MemorySettingsStore
 import local.daybook.datetime.CalendarDates
 import local.daybook.model.ArchiveReason
+import local.daybook.model.AppSettings
 import local.daybook.model.FontScale
 import local.daybook.model.NavEntry
 import local.daybook.model.ThemeMode
