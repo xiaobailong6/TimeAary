@@ -1,0 +1,345 @@
+﻿2026-11-03T15:11:31.3205775Z Current runner version: '2.338.2'
+2026-11-03T15:11:31.3232030Z ##[group]Runner Image Provisioner
+2026-11-03T15:11:31.3233108Z Hosted Compute Agent
+2026-11-03T15:11:31.3233787Z Version: 20261021.618
+2026-11-03T15:11:31.3234565Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-11-03T15:11:31.3235409Z Build Date: 2026-10-21T00:45:21Z
+2026-11-03T15:11:31.3236417Z Worker ID: {5cf549f5-1b7f-477f-8ad0-9e53b577bbb2}
+2026-11-03T15:11:31.3237212Z Region: westcentralus
+2026-11-03T15:11:31.3237931Z Cloud: Azure
+2026-11-03T15:11:31.3238570Z ##[endgroup]
+2026-11-03T15:11:31.3240179Z ##[group]Operating System
+2026-11-03T15:11:31.3240875Z Ubuntu
+2026-11-03T15:11:31.3241434Z 24.04.5
+2026-11-03T15:11:31.3242080Z LTS
+2026-11-03T15:11:31.3242701Z ##[endgroup]
+2026-11-03T15:11:31.3243335Z ##[group]Runner Image
+2026-11-03T15:11:31.3244016Z Image: ubuntu-24.04
+2026-11-03T15:11:31.3244647Z Version: 20261025.353.1
+2026-11-03T15:11:31.3246316Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261025.353/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-03T15:11:31.3248080Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261025.353
+2026-11-03T15:11:31.3249148Z ##[endgroup]
+2026-11-03T15:11:31.3250779Z ##[group]GITHUB_TOKEN Permissions
+2026-11-03T15:11:31.3253097Z Contents: read
+2026-11-03T15:11:31.3253807Z Metadata: read
+2026-11-03T15:11:31.3254563Z ##[endgroup]
+2026-11-03T15:11:31.3257201Z Secret source: Actions
+2026-11-03T15:11:31.3258335Z Cache mode: write
+2026-11-03T15:11:31.3259581Z Prepare workflow directory
+2026-11-03T15:11:31.3598908Z Prepare all required actions
+2026-11-03T15:11:31.3647791Z Getting action download info
+2026-11-03T15:11:31.6396520Z Download action repository 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' (SHA:11bd71901bbe5b1630ceea73d27597364c9af683)
+2026-11-03T15:11:31.8074829Z Complete job name: checks
+2026-11-03T15:11:31.9035334Z ##[group]Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+2026-11-03T15:11:31.9036646Z with:
+2026-11-03T15:11:31.9037152Z   persist-credentials: false
+2026-11-03T15:11:31.9037715Z   repository: xiaobailong6/TimeAary
+2026-11-03T15:11:31.9041568Z   token: ***
+2026-11-03T15:11:31.9042040Z   ssh-strict: true
+2026-11-03T15:11:31.9042512Z   ssh-user: git
+2026-11-03T15:11:31.9042957Z   clean: true
+2026-11-03T15:11:31.9043434Z   sparse-checkout-cone-mode: true
+2026-11-03T15:11:31.9043977Z   fetch-depth: 1
+2026-11-03T15:11:31.9044434Z   fetch-tags: false
+2026-11-03T15:11:31.9044905Z   show-progress: true
+2026-11-03T15:11:31.9045375Z   lfs: false
+2026-11-03T15:11:31.9045812Z   submodules: false
+2026-11-03T15:11:31.9046412Z   set-safe-directory: true
+2026-11-03T15:11:31.9047108Z ##[endgroup]
+2026-11-03T15:11:32.1164955Z Syncing repository: xiaobailong6/TimeAary
+2026-11-03T15:11:32.1167390Z ##[group]Getting Git version info
+2026-11-03T15:11:32.1168567Z Working directory is '/home/runner/work/TimeAary/TimeAary'
+2026-11-03T15:11:32.1170203Z [command]/usr/bin/git version
+2026-11-03T15:11:32.1231242Z git version 2.56.0
+2026-11-03T15:11:32.1254088Z ##[endgroup]
+2026-11-03T15:11:32.1270250Z Temporarily overriding HOME='/home/runner/work/_temp/9b067fbc-15e9-4251-9629-a3eccdcd0af1' before making global git config changes
+2026-11-03T15:11:32.1272514Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-03T15:11:32.1275792Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/TimeAary/TimeAary
+2026-11-03T15:11:32.1330689Z Deleting the contents of '/home/runner/work/TimeAary/TimeAary'
+2026-11-03T15:11:32.1335341Z ##[group]Initializing the repository
+2026-11-03T15:11:32.1341351Z [command]/usr/bin/git init /home/runner/work/TimeAary/TimeAary
+2026-11-03T15:11:32.1437195Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-03T15:11:32.1439065Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-03T15:11:32.1440696Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-03T15:11:32.1442329Z hint: call:
+2026-11-03T15:11:32.1443011Z hint:
+2026-11-03T15:11:32.1443907Z hint: 	git config --global init.defaultBranch <name>
+2026-11-03T15:11:32.1444989Z hint:
+2026-11-03T15:11:32.1445994Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-03T15:11:32.1447880Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-03T15:11:32.1449145Z hint:
+2026-11-03T15:11:32.1449786Z hint: 	git branch -m <name>
+2026-11-03T15:11:32.1450520Z hint:
+2026-11-03T15:11:32.1451506Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-03T15:11:32.1453338Z Initialized empty Git repository in /home/runner/work/TimeAary/TimeAary/.git/
+2026-11-03T15:11:32.1467974Z [command]/usr/bin/git remote add origin https://github.com/xiaobailong6/TimeAary
+2026-11-03T15:11:32.1513605Z ##[endgroup]
+2026-11-03T15:11:32.1514793Z ##[group]Disabling automatic garbage collection
+2026-11-03T15:11:32.1517871Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-03T15:11:32.1555861Z ##[endgroup]
+2026-11-03T15:11:32.1557137Z ##[group]Setting up auth
+2026-11-03T15:11:32.1563241Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T15:11:32.1602805Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T15:11:32.2012294Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T15:11:32.2063311Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T15:11:32.2344429Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-03T15:11:32.2398939Z ##[endgroup]
+2026-11-03T15:11:32.2399758Z ##[group]Fetching the repository
+2026-11-03T15:11:32.2411677Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +cb53aa56a392bb221b7915f909e586ab2dba0b95:refs/remotes/origin/main
+2026-11-03T15:11:32.8769359Z From https://github.com/xiaobailong6/TimeAary
+2026-11-03T15:11:32.8770786Z  * [new ref]         cb53aa56a392bb221b7915f909e586ab2dba0b95 -> origin/main
+2026-11-03T15:11:32.8774849Z ##[endgroup]
+2026-11-03T15:11:32.8778948Z ##[group]Determining the checkout info
+2026-11-03T15:11:32.8780335Z ##[endgroup]
+2026-11-03T15:11:32.8787121Z [command]/usr/bin/git sparse-checkout disable
+2026-11-03T15:11:32.8903678Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-03T15:11:32.8905907Z ##[group]Checking out the ref
+2026-11-03T15:11:32.8907835Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-11-03T15:11:32.9040478Z Switched to a new branch 'main'
+2026-11-03T15:11:32.9046477Z branch 'main' set up to track 'origin/main'.
+2026-11-03T15:11:32.9054582Z ##[endgroup]
+2026-11-03T15:11:32.9197373Z [command]/usr/bin/git log -1 --format=%H
+2026-11-03T15:11:32.9254412Z cb53aa56a392bb221b7915f909e586ab2dba0b95
+2026-11-03T15:11:32.9268696Z ##[group]Removing auth
+2026-11-03T15:11:32.9275516Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T15:11:32.9328705Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T15:11:32.9590663Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T15:11:32.9629359Z http.https://github.com/.extraheader
+2026-11-03T15:11:32.9638201Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-03T15:11:32.9685610Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T15:11:32.9943014Z ##[endgroup]
+2026-11-03T15:11:33.0322399Z Prepare all required actions
+2026-11-03T15:11:33.0324245Z Getting action download info
+2026-11-03T15:11:33.1471965Z Download action repository 'actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3' (SHA:cf277c60eb25467037889841efdb72551f06f6c3)
+2026-11-03T15:11:33.7996406Z ##[group]Run ./.github/actions/android
+2026-11-03T15:11:33.7997481Z ##[endgroup]
+2026-11-03T15:11:33.8064035Z ##[start-action display=Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3;id=__self.__actions_setup-java]
+2026-11-03T15:11:33.8345687Z ##[group]Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+2026-11-03T15:11:33.8347206Z with:
+2026-11-03T15:11:33.8347969Z   distribution: temurin
+2026-11-03T15:11:33.8348834Z   java-version: 17
+2026-11-03T15:11:33.8349661Z   java-package: jdk
+2026-11-03T15:11:33.8350489Z   check-latest: false
+2026-11-03T15:11:33.8351345Z   server-id: github
+2026-11-03T15:11:33.8352199Z   server-username: GITHUB_ACTOR
+2026-11-03T15:11:33.8353261Z   server-password: GITHUB_TOKEN
+2026-11-03T15:11:33.8354234Z   overwrite-settings: true
+2026-11-03T15:11:33.8355134Z   job-status: success
+2026-11-03T15:11:33.8363883Z   token: ***
+2026-11-03T15:11:33.8364658Z ##[endgroup]
+2026-11-03T15:11:34.0162045Z ##[warning]setup-java v4 is deprecated and will no longer receive updates. Please migrate to actions/setup-java@v5.
+2026-11-03T15:11:34.0166486Z ##[group]Installed distributions
+2026-11-03T15:11:34.0203644Z Resolved Java 17.0.21+9 from tool-cache
+2026-11-03T15:11:34.0205325Z Setting Java 17.0.21+9 as the default
+2026-11-03T15:11:34.0216541Z (node:2404) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-03T15:11:34.0220381Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-03T15:11:34.0222807Z Creating toolchains.xml for JDK version 17 from temurin
+2026-11-03T15:11:34.0293219Z Writing to /home/runner/.m2/toolchains.xml
+2026-11-03T15:11:34.0294525Z 
+2026-11-03T15:11:34.0295090Z Java configuration:
+2026-11-03T15:11:34.0296616Z   Distribution: temurin
+2026-11-03T15:11:34.0297965Z   Version: 17.0.21+9
+2026-11-03T15:11:34.0299666Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-03T15:11:34.0301206Z 
+2026-11-03T15:11:34.0302477Z ##[endgroup]
+2026-11-03T15:11:34.0321247Z Creating settings.xml with server-id: github
+2026-11-03T15:11:34.0342157Z Writing to /home/runner/.m2/settings.xml
+2026-11-03T15:11:34.0483197Z ##[end-action id=__self.__actions_setup-java;outcome=success;conclusion=success;duration_ms=241]
+2026-11-03T15:11:34.0492419Z ##[start-action display=Install verified Gradle;id=__self.__run]
+2026-11-03T15:11:34.0564742Z ##[group]Run set -euo pipefail
+2026-11-03T15:11:34.0566464Z [36;1mset -euo pipefail[0m
+2026-11-03T15:11:34.0568910Z [36;1mcurl --fail --location --retry 3 https://downloads.gradle.org/distributions/gradle-8.11.1-bin.zip -o "$RUNNER_TEMP/gradle.zip"[0m
+2026-11-03T15:11:34.0572677Z [36;1mecho "f397b287023acdba1e9f6fc5ea72d22dd63669d59ed4a289a29b1a76eee151c6  $RUNNER_TEMP/gradle.zip" | sha256sum --check[0m
+2026-11-03T15:11:34.0575373Z [36;1munzip -q "$RUNNER_TEMP/gradle.zip" -d "$RUNNER_TEMP"[0m
+2026-11-03T15:11:34.0577172Z [36;1mecho "$RUNNER_TEMP/gradle-8.11.1/bin" >> "$GITHUB_PATH"[0m
+2026-11-03T15:11:34.0609346Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-03T15:11:34.0611401Z env:
+2026-11-03T15:11:34.0612869Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-03T15:11:34.0615610Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-03T15:11:34.0618001Z ##[endgroup]
+2026-11-03T15:11:34.0836533Z   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+2026-11-03T15:11:34.0839057Z                                  Dload  Upload   Total   Spent    Left  Speed
+2026-11-03T15:11:34.0840629Z 
+2026-11-03T15:11:34.1926859Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2026-11-03T15:11:34.1929745Z 100   169  100   169    0     0   1547      0 --:--:-- --:--:-- --:--:--  1550
+2026-11-03T15:11:34.3152590Z 
+2026-11-03T15:11:34.7177872Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2026-11-03T15:11:34.7178860Z 
+2026-11-03T15:11:35.0949693Z  38  130M   38 50.0M    0     0  78.8M      0  0:00:01 --:--:--  0:00:01 78.8M
+2026-11-03T15:11:35.0950888Z 100  130M  100  130M    0     0   129M      0  0:00:01  0:00:01 --:--:--  213M
+2026-11-03T15:11:35.2157752Z /home/runner/work/_temp/gradle.zip: OK
+2026-11-03T15:11:36.2936308Z ##[end-action id=__self.__run;outcome=success;conclusion=success;duration_ms=2244]
+2026-11-03T15:11:36.2940715Z ##[start-action display=Install SDK packages;id=__self.__run_2]
+2026-11-03T15:11:36.2970444Z ##[group]Run set -euo pipefail
+2026-11-03T15:11:36.2970838Z [36;1mset -euo pipefail[0m
+2026-11-03T15:11:36.2971399Z [36;1m"$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" "build-tools;35.0.0"[0m
+2026-11-03T15:11:36.2995435Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-03T15:11:36.2995838Z env:
+2026-11-03T15:11:36.2996321Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-03T15:11:36.2996870Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-03T15:11:36.2997344Z ##[endgroup]
+2026-11-03T15:11:37.2745330Z Loading package information...                                                  
+2026-11-03T15:11:37.3803934Z Loading local repository...                                                     
+2026-11-03T15:11:37.3805484Z [                                       ] 3% Loading local repository...        
+2026-11-03T15:11:37.8012927Z [                                       ] 3% Fetch remote repository...         
+2026-11-03T15:11:38.2187849Z [=                                      ] 3% Fetch remote repository...         
+2026-11-03T15:11:38.3088564Z [=                                      ] 4% Fetch remote repository...         
+2026-11-03T15:11:38.3559595Z [=                                      ] 5% Fetch remote repository...         
+2026-11-03T15:11:38.4110177Z [==                                     ] 5% Fetch remote repository...         
+2026-11-03T15:11:38.4965025Z [==                                     ] 6% Fetch remote repository...         
+2026-11-03T15:11:38.6827841Z [==                                     ] 7% Fetch remote repository...         
+2026-11-03T15:11:38.6857360Z [==                                     ] 7% Computing updates...               
+2026-11-03T15:11:38.6950757Z [===                                    ] 8% Computing updates...               
+2026-11-03T15:11:38.7037416Z [===                                    ] 10% Computing updates...              
+2026-11-03T15:11:38.7057529Z [=======================================] 100% Computing updates...             
+2026-11-03T15:11:38.7077498Z 
+2026-11-03T15:11:38.7426824Z ##[end-action id=__self.__run_2;outcome=success;conclusion=success;duration_ms=2448]
+2026-11-03T15:11:38.7484437Z ##[group]Run python3 .github/scripts/check_project.py
+2026-11-03T15:11:38.7484857Z [36;1mpython3 .github/scripts/check_project.py[0m
+2026-11-03T15:11:38.7508153Z shell: /usr/bin/bash -e {0}
+2026-11-03T15:11:38.7508423Z env:
+2026-11-03T15:11:38.7508785Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-03T15:11:38.7509313Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-03T15:11:38.7509706Z ##[endgroup]
+2026-11-03T15:11:38.8005858Z PASS: project structure, XML, catalog references, icon dimensions and pinned actions/certificate
+2026-11-03T15:11:38.8097125Z ##[group]Run python3 -m unittest discover -s .github/scripts -p 'test_*.py' -v
+2026-11-03T15:11:38.8097724Z [36;1mpython3 -m unittest discover -s .github/scripts -p 'test_*.py' -v[0m
+2026-11-03T15:11:38.8118957Z shell: /usr/bin/bash -e {0}
+2026-11-03T15:11:38.8119626Z env:
+2026-11-03T15:11:38.8119951Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-03T15:11:38.8120460Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-03T15:11:38.8120858Z ##[endgroup]
+2026-11-03T15:11:38.9154102Z test_archive_keeps_first_timestamp_and_ignores_repeat (test_entry_sql.EntrySqlTests.test_archive_keeps_first_timestamp_and_ignores_repeat) ... ok
+2026-11-03T15:11:38.9160854Z test_archive_moves_record_between_lists_and_pauses_counts (test_entry_sql.EntrySqlTests.test_archive_moves_record_between_lists_and_pauses_counts) ... ok
+2026-11-03T15:11:38.9166991Z test_archive_page_is_separate_searchable_and_newest_first (test_entry_sql.EntrySqlTests.test_archive_page_is_separate_searchable_and_newest_first) ... ok
+2026-11-03T15:11:38.9172483Z test_ascii_search_is_case_insensitive_in_title_and_note (test_entry_sql.EntrySqlTests.test_ascii_search_is_case_insensitive_in_title_and_note) ... ok
+2026-11-03T15:11:38.9179112Z test_batch_assign_category_moves_only_selected_rows (test_entry_sql.EntrySqlTests.test_batch_assign_category_moves_only_selected_rows) ... ok
+2026-11-03T15:11:38.9184663Z test_batch_delete_removes_only_selected_rows (test_entry_sql.EntrySqlTests.test_batch_delete_removes_only_selected_rows) ... ok
+2026-11-03T15:11:38.9189203Z test_categories_list_uses_position_then_case_insensitive_name (test_entry_sql.EntrySqlTests.test_categories_list_uses_position_then_case_insensitive_name) ... ok
+2026-11-03T15:11:38.9194670Z test_category_filter_combines_with_search_and_archive_state (test_entry_sql.EntrySqlTests.test_category_filter_combines_with_search_and_archive_state) ... ok
+2026-11-03T15:11:38.9200654Z test_category_filter_isolates_and_excludes_uncategorized (test_entry_sql.EntrySqlTests.test_category_filter_isolates_and_excludes_uncategorized) ... ok
+2026-11-03T15:11:38.9205222Z test_chinese_note_substring (test_entry_sql.EntrySqlTests.test_chinese_note_substring) ... ok
+2026-11-03T15:11:38.9210129Z test_chinese_title_substring_and_kind_isolation (test_entry_sql.EntrySqlTests.test_chinese_title_substring_and_kind_isolation) ... ok
+2026-11-03T15:11:38.9216741Z test_completion_updates_page_summary_and_distribution (test_entry_sql.EntrySqlTests.test_completion_updates_page_summary_and_distribution) ... ok
+2026-11-03T15:11:38.9222972Z test_date_filters_have_strict_boundaries_and_bound_today (test_entry_sql.EntrySqlTests.test_date_filters_have_strict_boundaries_and_bound_today) ... ok
+2026-11-03T15:11:38.9229960Z test_delete_category_migrates_records_without_deleting_them (test_entry_sql.EntrySqlTests.test_delete_category_migrates_records_without_deleting_them) ... ok
+2026-11-03T15:11:38.9235245Z test_delete_updates_page_summary_and_distribution (test_entry_sql.EntrySqlTests.test_delete_updates_page_summary_and_distribution) ... ok
+2026-11-03T15:11:38.9240721Z test_distribution_exact_inclusive_range_and_order (test_entry_sql.EntrySqlTests.test_distribution_exact_inclusive_range_and_order) ... ok
+2026-11-03T15:11:38.9247007Z test_edit_date_updates_filters_search_summary_and_distribution (test_entry_sql.EntrySqlTests.test_edit_date_updates_filters_search_summary_and_distribution) ... ok
+2026-11-03T15:11:38.9251340Z test_empty_summary_has_zero_counts (test_entry_sql.EntrySqlTests.test_empty_summary_has_zero_counts) ... ok
+2026-11-03T15:11:38.9255679Z test_icon_and_color_are_saved_changed_and_cleared (test_entry_sql.EntrySqlTests.test_icon_and_color_are_saved_changed_and_cleared) ... ok
+2026-11-03T15:11:38.9260542Z test_injection_like_search_is_bound_not_executed (test_entry_sql.EntrySqlTests.test_injection_like_search_is_bound_not_executed) ... ok
+2026-11-03T15:11:38.9265533Z test_percent_and_underscore_are_literal (test_entry_sql.EntrySqlTests.test_percent_and_underscore_are_literal) ... ok
+2026-11-03T15:11:38.9270458Z test_pinned_records_stay_first_within_the_same_list (test_entry_sql.EntrySqlTests.test_pinned_records_stay_first_within_the_same_list) ... ok
+2026-11-03T15:11:38.9279235Z test_search_reaches_beyond_thirty_loaded_rows (test_entry_sql.EntrySqlTests.test_search_reaches_beyond_thirty_loaded_rows) ... ok
+2026-11-03T15:11:38.9284540Z test_sort_modes_use_uuid_tiebreak_and_completed_last (test_entry_sql.EntrySqlTests.test_sort_modes_use_uuid_tiebreak_and_completed_last) ... ok
+2026-11-03T15:11:38.9288510Z test_summary_exact_counts_and_today_boundary (test_entry_sql.EntrySqlTests.test_summary_exact_counts_and_today_boundary) ... ok
+2026-11-03T15:11:38.9292993Z test_todo_open_done_and_overdue (test_entry_sql.EntrySqlTests.test_todo_open_done_and_overdue) ... ok
+2026-11-03T15:11:38.9331886Z test_distribution_contains_only_verified_apk (test_signing.SigningTests.test_distribution_contains_only_verified_apk) ... ok
+2026-11-03T15:11:38.9341255Z test_invalid_base64_rejected (test_signing.SigningTests.test_invalid_base64_rejected) ... ok
+2026-11-03T15:11:38.9351857Z test_missing_secrets_rejected_before_any_file_is_written (test_signing.SigningTests.test_missing_secrets_rejected_before_any_file_is_written) ... ok
+2026-11-03T15:11:38.9361217Z test_oversized_secret_rejected (test_signing.SigningTests.test_oversized_secret_rejected) ... ok
+2026-11-03T15:11:38.9375642Z test_prepare_exports_path_without_logging_secrets_and_cleanup_is_idempotent (test_signing.SigningTests.test_prepare_exports_path_without_logging_secrets_and_cleanup_is_idempotent) ... ok
+2026-11-03T15:11:38.9395780Z test_signature_tool_failure_prevents_distribution (test_signing.SigningTests.test_signature_tool_failure_prevents_distribution) ... ok
+2026-11-03T15:11:38.9420181Z test_version_mismatch_prevents_distribution (test_signing.SigningTests.test_version_mismatch_prevents_distribution) ... ok
+2026-11-03T15:11:38.9447542Z test_wrong_application_identity_rejected (test_signing.SigningTests.test_wrong_application_identity_rejected) ... ok
+2026-11-03T15:11:38.9479994Z test_wrong_native_architecture_rejected (test_signing.SigningTests.test_wrong_native_architecture_rejected) ... ok
+2026-11-03T15:11:38.9509936Z test_wrong_signer_rejected (test_signing.SigningTests.test_wrong_signer_rejected) ... ok
+2026-11-03T15:11:38.9510603Z 
+2026-11-03T15:11:38.9510837Z ----------------------------------------------------------------------
+2026-11-03T15:11:38.9511356Z Ran 36 tests in 0.037s
+2026-11-03T15:11:38.9511580Z 
+2026-11-03T15:11:38.9513829Z OK
+2026-11-03T15:11:38.9722050Z ##[group]Run gradle --no-daemon :app:testReleaseUnitTest :app:lintRelease
+2026-11-03T15:11:38.9722937Z [36;1mgradle --no-daemon :app:testReleaseUnitTest :app:lintRelease[0m
+2026-11-03T15:11:38.9753935Z shell: /usr/bin/bash -e {0}
+2026-11-03T15:11:38.9754350Z env:
+2026-11-03T15:11:38.9754862Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-03T15:11:38.9755691Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-03T15:11:38.9756554Z ##[endgroup]
+2026-11-03T15:11:39.6321866Z 
+2026-11-03T15:11:39.6325268Z Welcome to Gradle 8.11.1!
+2026-11-03T15:11:39.6325791Z 
+2026-11-03T15:11:39.6327553Z Here are the highlights of this release:
+2026-11-03T15:11:39.6329359Z  - Parallel load and store for Configuration Cache
+2026-11-03T15:11:39.6331076Z  - Java compilation errors at the end of the build output
+2026-11-03T15:11:39.6332700Z  - Consolidated report for warnings and deprecations
+2026-11-03T15:11:39.6333321Z 
+2026-11-03T15:11:39.6335293Z For more details see https://docs.gradle.org/8.11.1/release-notes.html
+2026-11-03T15:11:39.6335965Z 
+2026-11-03T15:11:39.7257875Z To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.11.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+2026-11-03T15:11:40.8237455Z Daemon will be stopped at the end of the build 
+2026-11-03T15:12:43.2249768Z > Task :app:buildKotlinToolingMetadata
+2026-11-03T15:12:43.2258977Z > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-11-03T15:12:43.2259557Z > Task :app:preBuild UP-TO-DATE
+2026-11-03T15:12:43.2259911Z > Task :app:preReleaseBuild UP-TO-DATE
+2026-11-03T15:12:43.3232079Z > Task :app:generateReleaseBuildConfig
+2026-11-03T15:12:55.9235695Z > Task :app:generateReleaseResValues
+2026-11-03T15:12:55.9276996Z > Task :app:checkReleaseAarMetadata
+2026-11-03T15:12:56.0242928Z > Task :app:mapReleaseSourceSetPaths
+2026-11-03T15:12:56.0244919Z > Task :app:generateReleaseResources
+2026-11-03T15:12:57.4232385Z > Task :app:packageReleaseResources
+2026-11-03T15:12:57.6232539Z > Task :app:mergeReleaseResources
+2026-11-03T15:12:57.9268479Z > Task :app:createReleaseCompatibleScreenManifests
+2026-11-03T15:12:57.9292675Z > Task :app:extractDeepLinksRelease
+2026-11-03T15:12:58.0238078Z > Task :app:parseReleaseLocalResources
+2026-11-03T15:12:58.2247822Z > Task :app:processReleaseMainManifest
+2026-11-03T15:12:58.3232598Z > Task :app:processReleaseManifest
+2026-11-03T15:13:01.6257460Z > Task :app:preReleaseUnitTestBuild UP-TO-DATE
+2026-11-03T15:13:01.6258468Z > Task :app:javaPreCompileReleaseUnitTest
+2026-11-03T15:13:01.6277035Z > Task :app:processReleaseManifestForPackage
+2026-11-03T15:13:01.6277801Z > Task :app:javaPreCompileRelease
+2026-11-03T15:13:01.8231995Z > Task :app:extractProguardFiles
+2026-11-03T15:13:02.0257570Z > Task :app:processReleaseResources
+2026-11-03T15:13:16.2261739Z > Task :app:kspReleaseKotlin
+2026-11-03T15:13:24.2237668Z 
+2026-11-03T15:13:24.2257771Z e: file:///home/runner/work/TimeAary/TimeAary/app/src/code/ui/AnalysisContent.kt:33:36 Overload resolution ambiguity between candidates:
+2026-11-03T15:13:24.2293940Z fun ReadErrorCard(message: String, onRetry: () -> Unit): Unit
+2026-11-03T15:13:24.2294631Z > Task :app:compileReleaseKotlin FAILED
+2026-11-03T15:13:24.2326809Z fun ReadErrorCard(message: String, onRetry: () -> Unit): Unit
+2026-11-03T15:13:24.2328065Z e: file:///home/runner/work/TimeAary/TimeAary/app/src/code/ui/AnalysisContent.kt:66:40 Overload resolution ambiguity between candidates:
+2026-11-03T15:13:24.2329268Z fun ReadErrorCard(message: String, onRetry: () -> Unit): Unit
+2026-11-03T15:13:24.2330026Z fun ReadErrorCard(message: String, onRetry: () -> Unit): Unit
+2026-11-03T15:13:24.2331036Z e: file:///home/runner/work/TimeAary/TimeAary/app/src/code/ui/AnalysisContent.kt:81:1 Conflicting overloads:
+2026-11-03T15:13:24.2332022Z fun ReadErrorCard(message: String, onRetry: () -> Unit): Unit
+2026-11-03T15:13:24.2357719Z e: file:///home/runner/work/TimeAary/TimeAary/app/src/code/ui/AppScreen.kt:187:41 Overload resolution ambiguity between candidates:
+2026-11-03T15:13:24.2386909Z fun ReadErrorCard(message: String, onRetry: () -> Unit): Unit
+2026-11-03T15:13:24.2387951Z fun ReadErrorCard(message: String, onRetry: () -> Unit): Unit
+2026-11-03T15:13:24.2389074Z e: file:///home/runner/work/TimeAary/TimeAary/app/src/code/ui/StatusCards.kt:14:1 Conflicting overloads:
+2026-11-03T15:13:24.2390039Z fun ReadErrorCard(message: String, onRetry: () -> Unit): Unit
+2026-11-03T15:13:24.3231562Z 
+2026-11-03T15:13:24.3236623Z FAILURE: Build failed with an exception.
+2026-11-03T15:13:24.3237666Z 
+2026-11-03T15:13:24.3242896Z * What went wrong:
+2026-11-03T15:13:24.3243340Z 20 actionable tasks: 20 executed
+2026-11-03T15:13:24.3244050Z Execution failed for task ':app:compileReleaseKotlin'.
+2026-11-03T15:13:24.3245247Z > A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+2026-11-03T15:13:24.3246581Z    > Compilation error. See log for more details
+2026-11-03T15:13:24.3246911Z 
+2026-11-03T15:13:24.3247045Z * Try:
+2026-11-03T15:13:24.3247423Z > Run with --stacktrace option to get the stack trace.
+2026-11-03T15:13:24.3248185Z > Run with --info or --debug option to get more log output.
+2026-11-03T15:13:24.3248537Z > Run with --scan to get full insights.
+2026-11-03T15:13:24.3248863Z > Get more help at https://help.gradle.org.
+2026-11-03T15:13:24.3249145Z 
+2026-11-03T15:13:24.3249280Z BUILD FAILED in 1m 45s
+2026-11-03T15:13:24.7605342Z ##[error]Process completed with exit code 1.
+2026-11-03T15:13:24.7694673Z Post job cleanup.
+2026-11-03T15:13:24.7699198Z ##[start-action display=Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3;id=__0a6e7aab-c395-4a80-8c85-e94b5834f9f5.__actions_setup-java]
+2026-11-03T15:13:24.7803937Z Post job cleanup.
+2026-11-03T15:13:24.9345138Z (node:2839) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-03T15:13:24.9346649Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-03T15:13:24.9440948Z ##[end-action id=__0a6e7aab-c395-4a80-8c85-e94b5834f9f5.__actions_setup-java;outcome=success;conclusion=success;duration_ms=174]
+2026-11-03T15:13:24.9540398Z Post job cleanup.
+2026-11-03T15:13:25.0549908Z [command]/usr/bin/git version
+2026-11-03T15:13:25.0599305Z git version 2.56.0
+2026-11-03T15:13:25.0640767Z Temporarily overriding HOME='/home/runner/work/_temp/dc41287f-9864-48ba-b0d2-160315e07125' before making global git config changes
+2026-11-03T15:13:25.0644249Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-03T15:13:25.0647463Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/TimeAary/TimeAary
+2026-11-03T15:13:25.0691619Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T15:13:25.0733400Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T15:13:25.1035881Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T15:13:25.1075457Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T15:13:25.1540617Z Cleaning up orphan processes
+2026-11-03T15:13:25.1859104Z Terminate orphan process: pid (2778) (java)
+2026-11-03T15:13:25.1931538Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

@@ -78,14 +78,6 @@ fun AnalysisContent(state: AppViewModel) {
 }
 
 @Composable
-fun ReadErrorCard(message: String, onRetry: () -> Unit) {
-    GlassCard(Modifier.fillMaxWidth()) {
-        Text(message, color = MaterialTheme.colorScheme.error)
-        TextButton(onClick = onRetry) { Text("重试") }
-    }
-}
-
-@Composable
 private fun DistributionChart(points: List<DistributionPoint>, window: AnalysisWindow) {
     var selected by rememberSaveable(window) { mutableIntStateOf(0) }
     val colors = MaterialTheme.colorScheme
