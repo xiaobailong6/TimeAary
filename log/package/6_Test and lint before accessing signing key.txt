@@ -1,73 +1,80 @@
-﻿2026-11-04T02:17:01.3272334Z ##[group]Run gradle --no-daemon :***:testReleaseUnitTest :***:lintRelease
-2026-11-04T02:17:01.3273376Z [36;1mgradle --no-daemon :***:testReleaseUnitTest :***:lintRelease[0m
-2026-11-04T02:17:01.3293246Z shell: /usr/bin/bash -e {0}
-2026-11-04T02:17:01.3293518Z env:
-2026-11-04T02:17:01.3293853Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
-2026-11-04T02:17:01.3294394Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
-2026-11-04T02:17:01.3294806Z ##[endgroup]
-2026-11-04T02:17:02.1376897Z 
-2026-11-04T02:17:02.1378581Z Welcome to Gradle 8.11.1!
-2026-11-04T02:17:02.1393324Z 
-2026-11-04T02:17:02.1393639Z Here are the highlights of this release:
-2026-11-04T02:17:02.1394097Z  - Parallel load and store for Configuration Cache
-2026-11-04T02:17:02.1394508Z  - Java compilation errors at the end of the build output
-2026-11-04T02:17:02.1394928Z  - Consolidated report for warnings and deprecations
-2026-11-04T02:17:02.1395178Z 
-2026-11-04T02:17:02.1395629Z For more details see https://docs.gradle.org/8.11.1/release-notes.html
-2026-11-04T02:17:02.1396028Z 
-2026-11-04T02:17:02.2385426Z To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.11.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
-2026-11-04T02:17:03.6365714Z Daemon will be stopped at the end of the build 
-2026-11-04T02:18:12.4467882Z > Task :***:buildKotlinToolingMetadata
-2026-11-04T02:18:12.4469088Z > Task :***:checkKotlinGradlePluginConfigurationErrors SKIPPED
-2026-11-04T02:18:12.4469988Z > Task :***:preBuild UP-TO-DATE
-2026-11-04T02:18:12.4470656Z > Task :***:preReleaseBuild UP-TO-DATE
-2026-11-04T02:18:12.5365463Z > Task :***:generateReleaseBuildConfig
-2026-11-04T02:18:23.6390229Z > Task :***:generateReleaseResValues
-2026-11-04T02:18:23.6391103Z > Task :***:checkReleaseAarMetadata
-2026-11-04T02:18:23.7398443Z > Task :***:mapReleaseSourceSetPaths
-2026-11-04T02:18:23.7399288Z > Task :***:generateReleaseResources
-2026-11-04T02:18:25.2384075Z > Task :***:packageReleaseResources
-2026-11-04T02:18:25.9365155Z > Task :***:mergeReleaseResources
-2026-11-04T02:18:26.2406165Z > Task :***:createReleaseCompatibleScreenManifests
-2026-11-04T02:18:26.2473637Z > Task :***:extractDeepLinksRelease
-2026-11-04T02:18:26.4395321Z > Task :***:parseReleaseLocalResources
-2026-11-04T02:18:26.5371284Z > Task :***:processReleaseMainManifest
-2026-11-04T02:18:26.6370798Z > Task :***:processReleaseManifest
-2026-11-04T02:18:29.9376970Z > Task :***:preReleaseUnitTestBuild UP-TO-DATE
-2026-11-04T02:18:29.9393520Z > Task :***:javaPreCompileReleaseUnitTest
-2026-11-04T02:18:29.9394741Z > Task :***:processReleaseManifestForPackage
-2026-11-04T02:18:29.9395962Z > Task :***:javaPreCompileRelease
-2026-11-04T02:18:30.1376085Z > Task :***:extractProguardFiles
-2026-11-04T02:18:30.4390173Z > Task :***:processReleaseResources
-2026-11-04T02:18:45.3414739Z > Task :***:kspReleaseKotlin
-2026-11-04T02:19:04.0367406Z > Task :***:compileReleaseKotlin
-2026-11-04T02:19:10.0403696Z > Task :***:compileReleaseJavaWithJavac
-2026-11-04T02:19:10.1365656Z > Task :***:bundleReleaseClassesToRuntimeJar
-2026-11-04T02:19:10.1385096Z > Task :***:processReleaseJavaRes
-2026-11-04T02:19:10.1403654Z > Task :***:bundleReleaseClassesToCompileJar
-2026-11-04T02:19:11.9365753Z > Task :***:generateReleaseLintReportModel
-2026-11-04T02:19:13.0365882Z > Task :***:generateReleaseUnitTestLintModel
-2026-11-04T02:19:13.5373855Z > Task :***:kspReleaseUnitTestKotlin
-2026-11-04T02:19:19.6383451Z 
-2026-11-04T02:19:19.6403841Z > Task :***:compileReleaseUnitTestKotlin FAILED
-2026-11-04T02:19:19.6424011Z e: file:///home/runner/work/TimeAary/TimeAary/***/tests/AppViewModelTest.kt:343:30 Unresolved reference 'AppSettings'.
-2026-11-04T02:19:41.5364061Z 
-2026-11-04T02:19:41.5366692Z > Task :***:lintAnalyzeReleaseUnitTest
-2026-11-04T02:19:43.0403807Z > Task :***:lintAnalyzeRelease
-2026-11-04T02:19:53.1373133Z 
-2026-11-04T02:19:53.1413665Z FAILURE: Build failed with an exception.
-2026-11-04T02:19:53.1414781Z 30 actionable tasks: 30 executed
-2026-11-04T02:19:53.1415415Z 
-2026-11-04T02:19:53.1443264Z * What went wrong:
-2026-11-04T02:19:53.1473505Z Execution failed for task ':***:compileReleaseUnitTestKotlin'.
-2026-11-04T02:19:53.1481840Z > A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
-2026-11-04T02:19:53.1513234Z    > Compilation error. See log for more details
-2026-11-04T02:19:53.1543072Z 
-2026-11-04T02:19:53.1611670Z * Try:
-2026-11-04T02:19:53.1620224Z > Run with --stacktrace option to get the stack trace.
-2026-11-04T02:19:53.1663392Z > Run with --info or --debug option to get more log output.
-2026-11-04T02:19:53.1678811Z > Run with --scan to get full insights.
-2026-11-04T02:19:53.1703390Z > Get more help at https://help.gradle.org.
-2026-11-04T02:19:53.1732814Z 
-2026-11-04T02:19:53.1754174Z BUILD FAILED in 2m 51s
-2026-11-04T02:19:53.7058694Z ##[error]Process completed with exit code 1.
+﻿2026-11-04T02:25:34.1463105Z ##[group]Run gradle --no-daemon :***:testReleaseUnitTest :***:lintRelease
+2026-11-04T02:25:34.1463553Z [36;1mgradle --no-daemon :***:testReleaseUnitTest :***:lintRelease[0m
+2026-11-04T02:25:34.1481186Z shell: /usr/bin/bash -e {0}
+2026-11-04T02:25:34.1481412Z env:
+2026-11-04T02:25:34.1481688Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-04T02:25:34.1482084Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-04T02:25:34.1482394Z ##[endgroup]
+2026-11-04T02:25:34.8027631Z 
+2026-11-04T02:25:34.8029137Z Welcome to Gradle 8.11.1!
+2026-11-04T02:25:34.8029425Z 
+2026-11-04T02:25:34.8030390Z Here are the highlights of this release:
+2026-11-04T02:25:34.8032906Z  - Parallel load and store for Configuration Cache
+2026-11-04T02:25:34.8033793Z  - Java compilation errors at the end of the build output
+2026-11-04T02:25:34.8034512Z  - Consolidated report for warnings and deprecations
+2026-11-04T02:25:34.8035066Z 
+2026-11-04T02:25:34.8036437Z For more details see https://docs.gradle.org/8.11.1/release-notes.html
+2026-11-04T02:25:34.8037232Z 
+2026-11-04T02:25:34.9048380Z To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.11.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+2026-11-04T02:25:36.3022141Z Daemon will be stopped at the end of the build 
+2026-11-04T02:26:36.2069640Z > Task :***:buildKotlinToolingMetadata
+2026-11-04T02:26:36.3018539Z > Task :***:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-11-04T02:26:36.3021637Z > Task :***:preBuild UP-TO-DATE
+2026-11-04T02:26:36.3022292Z > Task :***:preReleaseBuild UP-TO-DATE
+2026-11-04T02:26:36.3022741Z > Task :***:generateReleaseBuildConfig
+2026-11-04T02:26:50.3039713Z > Task :***:generateReleaseResValues
+2026-11-04T02:26:50.3040284Z > Task :***:checkReleaseAarMetadata
+2026-11-04T02:26:50.4039384Z > Task :***:mapReleaseSourceSetPaths
+2026-11-04T02:26:50.4041098Z > Task :***:generateReleaseResources
+2026-11-04T02:26:51.8049409Z > Task :***:packageReleaseResources
+2026-11-04T02:26:52.5016783Z > Task :***:mergeReleaseResources
+2026-11-04T02:26:52.8029834Z > Task :***:createReleaseCompatibleScreenManifests
+2026-11-04T02:26:52.8039743Z > Task :***:extractDeepLinksRelease
+2026-11-04T02:26:52.8040708Z > Task :***:parseReleaseLocalResources
+2026-11-04T02:26:53.0019900Z > Task :***:processReleaseMainManifest
+2026-11-04T02:26:53.1017527Z > Task :***:processReleaseManifest
+2026-11-04T02:26:56.7037178Z > Task :***:processReleaseManifestForPackage
+2026-11-04T02:26:56.7051711Z > Task :***:javaPreCompileRelease
+2026-11-04T02:26:56.9017544Z > Task :***:preReleaseUnitTestBuild UP-TO-DATE
+2026-11-04T02:26:56.9018467Z > Task :***:javaPreCompileReleaseUnitTest
+2026-11-04T02:26:56.9019146Z > Task :***:extractProguardFiles
+2026-11-04T02:26:57.1022000Z > Task :***:processReleaseResources
+2026-11-04T02:27:11.1038958Z > Task :***:kspReleaseKotlin
+2026-11-04T02:27:25.9017203Z > Task :***:compileReleaseKotlin
+2026-11-04T02:27:30.5040860Z > Task :***:compileReleaseJavaWithJavac
+2026-11-04T02:27:30.6018295Z > Task :***:processReleaseJavaRes
+2026-11-04T02:27:30.6049102Z > Task :***:bundleReleaseClassesToCompileJar
+2026-11-04T02:27:30.6056012Z > Task :***:bundleReleaseClassesToRuntimeJar
+2026-11-04T02:27:32.1020477Z > Task :***:generateReleaseLintReportModel
+2026-11-04T02:27:33.1039324Z > Task :***:generateReleaseUnitTestLintModel
+2026-11-04T02:27:33.7019161Z > Task :***:kspReleaseUnitTestKotlin
+2026-11-04T02:27:42.2041306Z > Task :***:compileReleaseUnitTestKotlin
+2026-11-04T02:27:42.2076570Z > Task :***:compileReleaseUnitTestJavaWithJavac NO-SOURCE
+2026-11-04T02:27:42.3059266Z > Task :***:processReleaseUnitTestJavaRes
+2026-11-04T02:27:47.1031761Z 
+2026-11-04T02:27:47.1049372Z > Task :***:testReleaseUnitTest
+2026-11-04T02:27:47.1078384Z 
+2026-11-04T02:27:47.1139097Z AppViewModelTest > failedOperationsDoNotEmitSuccessMessage FAILED
+2026-11-04T02:27:47.1140157Z     java.lang.AssertionError at AppViewModelTest.kt:332
+2026-11-04T02:27:47.3038458Z 
+2026-11-04T02:27:47.3069006Z AppViewModelTest > deleteShowsSuccessMessageOnlyAfterSuccess FAILED
+2026-11-04T02:27:47.3098653Z     java.lang.AssertionError at AppViewModelTest.kt:410
+2026-11-04T02:27:47.6017315Z 
+2026-11-04T02:27:47.6018255Z 65 tests completed, 2 failed
+2026-11-04T02:27:47.7016321Z 
+2026-11-04T02:27:47.7018571Z > Task :***:testReleaseUnitTest FAILED
+2026-11-04T02:28:00.7032138Z > Task :***:lintAnalyzeReleaseUnitTest
+2026-11-04T02:28:03.1017731Z > Task :***:lintAnalyzeRelease
+2026-11-04T02:28:11.1022621Z 
+2026-11-04T02:28:11.1023251Z 32 actionable tasks: 32 executed
+2026-11-04T02:28:11.1023658Z FAILURE: Build failed with an exception.
+2026-11-04T02:28:11.1023913Z 
+2026-11-04T02:28:11.1023990Z * What went wrong:
+2026-11-04T02:28:11.1024355Z Execution failed for task ':***:testReleaseUnitTest'.
+2026-11-04T02:28:11.1025251Z > There were failing tests. See the report at: file:///home/runner/work/TimeAary/TimeAary/***/build/reports/tests/testReleaseUnitTest/index.html
+2026-11-04T02:28:11.1025970Z 
+2026-11-04T02:28:11.1026081Z * Try:
+2026-11-04T02:28:11.1026345Z > Run with --scan to get full insights.
+2026-11-04T02:28:11.1026587Z 
+2026-11-04T02:28:11.1026693Z BUILD FAILED in 2m 36s
+2026-11-04T02:28:11.5826902Z ##[error]Process completed with exit code 1.

@@ -72,53 +72,72 @@ class AppViewModelTest {
         }
         override fun distribution(start: LocalDate, endInclusive: LocalDate) = flowOf(emptyList<DayBucket>())
         override fun categories() = categoryRows
-        override suspend fun save(entry: Entry) {
+        // fail 模拟“存储不可用”：真实仓库此时所有写操作都会抛异常，假仓库保持一致。
+        private fun requireWritable() {
             if (fail) throw java.io.IOException("storage unavailable")
+        }
+        override suspend fun save(entry: Entry) {
+            requireWritable()
             saved.add(entry)
             records.value = records.value + (entry.id to entry)
         }
-        override suspend fun delete(id: String) { records.value = records.value - id }
+        override suspend fun delete(id: String) {
+            requireWritable()
+            records.value = records.value - id
+        }
 
         val deleteManyCalls = mutableListOf<List<String>>()
         val assignCalls = mutableListOf<Pair<List<String>, String?>>()
 
         override suspend fun deleteMany(ids: List<String>) {
+            requireWritable()
             deleteManyCalls.add(ids)
             records.value = records.value - ids.toSet()
         }
 
         override suspend fun assignCategoryMany(ids: List<String>, categoryId: String?) {
+            requireWritable()
             assignCalls.add(ids to categoryId)
             ids.forEach { id ->
                 records.value[id]?.let { records.value = records.value + (id to it.copy(categoryId = categoryId)) }
             }
         }
         override suspend fun setCompleted(id: String, completed: Boolean) {
+            requireWritable()
             records.value[id]?.let { records.value = records.value + (id to it.copy(completed = completed)) }
         }
         override suspend fun setPinned(id: String, pinned: Boolean) {
+            requireWritable()
             pins.add(id to pinned)
             records.value[id]?.let { records.value = records.value + (id to it.copy(pinned = pinned)) }
         }
         override suspend fun archive(id: String, reason: ArchiveReason) {
+            requireWritable()
             archivedCalls.add(id to reason)
             records.value[id]?.let { records.value = records.value + (id to it.copy(archivedAt = 1_000L, archiveReason = reason)) }
         }
         override suspend fun restore(id: String) {
+            requireWritable()
             restoreCalls.add(id)
             records.value[id]?.let { records.value = records.value + (id to it.copy(archivedAt = null, archiveReason = null)) }
         }
         override suspend fun createCategory(name: String) {
+            requireWritable()
             categoryFailure?.let { throw IllegalArgumentException(it) }
             val row = Category("category-$name", name, categoryRows.value.size)
             categoryRows.value = categoryRows.value + row
         }
         override suspend fun renameCategory(id: String, name: String) {
+            requireWritable()
             categoryFailure?.let { throw IllegalArgumentException(it) }
             categoryRows.value = categoryRows.value.map { if (it.id == id) it.copy(name = name) else it }
         }
-        override suspend fun moveCategory(id: String, offset: Int) { moves.add(id to offset) }
+        override suspend fun moveCategory(id: String, offset: Int) {
+            requireWritable()
+            moves.add(id to offset)
+        }
         override suspend fun deleteCategory(id: String) {
+            requireWritable()
             categoryRows.value = categoryRows.value.filterNot { it.id == id }
         }
     }

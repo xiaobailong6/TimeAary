@@ -1,8 +1,8 @@
-﻿2026-11-04T02:19:53.7122030Z ##[group]Run python3 .github/scripts/signing.py cleanup
-2026-11-04T02:19:53.7122486Z [36;1mpython3 .github/scripts/signing.py cleanup[0m
-2026-11-04T02:19:53.7142705Z shell: /usr/bin/bash -e {0}
-2026-11-04T02:19:53.7143035Z env:
-2026-11-04T02:19:53.7143373Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
-2026-11-04T02:19:53.7143897Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
-2026-11-04T02:19:53.7144472Z ##[endgroup]
-2026-11-04T02:19:53.7528141Z Temporary signing material removed.
+﻿2026-11-04T02:28:11.5878511Z ##[group]Run python3 .github/scripts/signing.py cleanup
+2026-11-04T02:28:11.5879025Z [36;1mpython3 .github/scripts/signing.py cleanup[0m
+2026-11-04T02:28:11.5896445Z shell: /usr/bin/bash -e {0}
+2026-11-04T02:28:11.5896658Z env:
+2026-11-04T02:28:11.5896916Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-04T02:28:11.5897316Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-04T02:28:11.5897620Z ##[endgroup]
+2026-11-04T02:28:11.6239955Z Temporary signing material removed.

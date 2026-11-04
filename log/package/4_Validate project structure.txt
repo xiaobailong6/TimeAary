@@ -1,8 +1,8 @@
-﻿2026-11-04T02:17:00.9621458Z ##[group]Run python3 .github/scripts/check_project.py
-2026-11-04T02:17:00.9621914Z [36;1mpython3 .github/scripts/check_project.py[0m
-2026-11-04T02:17:00.9642836Z shell: /usr/bin/bash -e {0}
-2026-11-04T02:17:00.9643115Z env:
-2026-11-04T02:17:00.9643462Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
-2026-11-04T02:17:00.9644001Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
-2026-11-04T02:17:00.9644398Z ##[endgroup]
-2026-11-04T02:17:01.0251134Z PASS: project structure, XML, catalog references, icon dimensions and pinned actions/certificate
+﻿2026-11-04T02:25:33.7655074Z ##[group]Run python3 .github/scripts/check_project.py
+2026-11-04T02:25:33.7655420Z [36;1mpython3 .github/scripts/check_project.py[0m
+2026-11-04T02:25:33.7674056Z shell: /usr/bin/bash -e {0}
+2026-11-04T02:25:33.7674277Z env:
+2026-11-04T02:25:33.7674537Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-04T02:25:33.7674958Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-9/x64
+2026-11-04T02:25:33.7675428Z ##[endgroup]
+2026-11-04T02:25:33.8058310Z PASS: project structure, XML, catalog references, icon dimensions and pinned actions/certificate
